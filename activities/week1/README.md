@@ -48,28 +48,33 @@ the Residential Energy Consumption Survey [RECS]().
 or windows.
 1. Use git to clone the Stats506_F20 repository:
 `git clone https://github.com/jbhender/Stats506_F20`
-or, if you've done so previously, `git pull` to get the most up to date version.
+or, if you've done so previously, `git pull` to get the most up-to-date version.
 1. Change directories to `Stats506_F20/activities/week1/`
 1. Use `emacs` or your preferred text editor to open `week1_part1.sh`.
 1. In a separate window, move to the same directory and execute the template:
 `bash ./week1_part1.sh`.
 
-### Part 1 - 
+### Part 1 - Download RECS and extract columns by name
 
 Look for numbered comments like `#<1>` for locations in `week1_part1.sh` 
 you should edit. 
 
 1. Modify the header with information about your group and the current date. 
 1. Create variables "file" and "url" with the name of the csv file to be downloaded and
- the download url. It may help to download it directly first. 
-1. Download the data if the test for whether the file exists fails.
-1. Write a "one-liner" -- a single series of commands connected by pipes and file redirections -- to extract the header row of the RECS data, translate (`tr`) the commas to new line characters, and write the results to the `recs_names.txt`. 
+   the download url. It may help to download the data directly first. 
+1. Download the data whenever the test for whether the file exists fails.
+1. Write a "one-liner" - a single series of commands connected by pipes 
+   and file redirections - to extract the header row of the RECS data, 
+   translate (`tr`) the commas to new line characters ('\n'), 
+   and write the results to the `recs_names.txt`. 
 1. Write a one-liner that uses `recs_names.txt` and finds the column positions for 
-the id (`DOEID) and replicate weight columns (`BRR1`-`BRR96`) and then reformats
- these positions as a single, comma-separated string. The format of this string should
+   the id (`DOEID`) and replicate weight columns (`BRR1`-`BRR96`) and then reformats
+   these positions as a single, comma-separated string. The format of this string should
 be suitable for passing to the `-f` option of the `cut` command. 
 
-### Part 2
+### Part 2 - Modify the previous script into an executable program. 
+
+We may skip this section depending on time. 
 
 ## Hints
 
@@ -102,14 +107,30 @@ Try to accomplish each step on your own prior to viewing the hint.
  b. Split your screen into two panes `cntrl+b %` e.g. `cntrl+b <shift>+5`
 
  c. To toggle between panes, use `cntrl+b ->` where `->` is an appropriate arrow key
- (left, right, up, or down). 
+    (left, right, up, or down). 
 
- d. If you prefer windows, use `cntrl+b c` and toggle with `cntrl+b n` or `cntrl+b p`.
+ d. For small screens, you may prefer windows to panes. In this case,
+    use `cntrl+b c` to create a window  and toggle with `cntrl+b n` or `cntrl+b p`.
 
 </details>
 
 
 ### Part 1
 
+<details>
+ <summary> Steps 1-3 Hints </summary>
+
+ a. Update the author names and date and remove 'template' from the description. 
+ a. Revisit the description after completing all steps.
+ a. To download, use `wget` e.g. `wget $url`. 
+
+</details>
+
+<details>
+ <summary> Step 4 Hint </summary>
+ 
+ a. 
+ 
+</details>
 
 ### Part 2
