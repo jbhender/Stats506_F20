@@ -120,9 +120,9 @@ Try to accomplish each step on your own prior to viewing the hint.
 <details>
  <summary> Steps 1-3 Hints </summary>
 
- a. Update the author names and date and remove 'template' from the description. 
- a. Revisit the description after completing all steps.
- a. To download, use `wget` e.g. `wget $url`. 
+ 1. Update the author names and date and remove 'template' from the description. 
+ 2. Revisit the description after completing all steps.
+ 3. To download, use `wget` e.g. `wget $url`. 
 
 </details>
 
