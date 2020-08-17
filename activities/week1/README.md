@@ -86,11 +86,9 @@ Try to accomplish each step on your own prior to viewing the hint.
   <summary> Step 1 Hint </summary>
 
   #### Mac Users 
-  a. open the 'terminal' application
-
-  b. ssh using your unique name `ssh unique_name@login.itd.umich.edu`
-
-  c. your unique name is the part of your @umich.edu email address prior to the @.
+  1. open the 'terminal' application
+  2. ssh using your unique name `ssh unique_name@login.itd.umich.edu`
+  3. your unique name is the part of your @umich.edu email address prior to the @.
 
   #### Windows Users
   Use [putty]() and connect to host `login.itd.umich.edu` or 
@@ -102,14 +100,11 @@ Try to accomplish each step on your own prior to viewing the hint.
 <details>
  <summary> Step 2 Hint </summary>
 
- a. Create a tmux session: `tmux new -s Stats_506`
-
- b. Split your screen into two panes `cntrl+b %` e.g. `cntrl+b <shift>+5`
-
- c. To toggle between panes, use `cntrl+b ->` where `->` is an appropriate arrow key
+ 1. Create a tmux session: `tmux new -s Stats_506`
+ 2. Split your screen into two panes `cntrl+b %` e.g. `cntrl+b <shift>+5`
+ 3. To toggle between panes, use `cntrl+b ->` where `->` is an appropriate arrow key
     (left, right, up, or down). 
-
- d. For small screens, you may prefer windows to panes. In this case,
+ 4. For small screens, you may prefer windows to panes. In this case,
     use `cntrl+b c` to create a window  and toggle with `cntrl+b n` or `cntrl+b p`.
 
 </details>
@@ -129,7 +124,30 @@ Try to accomplish each step on your own prior to viewing the hint.
 <details>
  <summary> Step 4 Hint </summary>
  
- a. 
+ 1. Break 1-liners into steps and test as you go:
+   - What file will you operate on?
+   - What command will extract just the header row?
+   - How to pass the header row to a new command?
+   - What command will translate commas to new line characters?
+   - Where should the output go?
+ 1. See `man tr`.
+ 1. If you're not getting new lines from `tr` consider the difference in output
+    between: `echo \n` and `echo \\n`. Slashes represent escape characters and often
+    need to be repeated when parsed.
+
+</details>
+ 
+<details>
+  <summary> Step 5 Hint </summary>
+
+ 1. Use `grep` to find matching lines. Review the options `-n, -e, -E`. 
+ 1. Use a regular expression to match DOEID or starts with BRR. 
+ 1. See `man cut` used in the next step and review the `-f` option for
+    specifying fields. 
+ 1. Use `cut` to extract just line numbers from the `grep` output.
+ 1. See `man paste` for options and use an explicit `-` to input to paste from `stdin`.
+    For example, create a test file `echo a > test.txt; echo b >> test.txt` and observe
+    that `<test.txt paste -s` and `cat test.txt | paste -s -` have the same output.
  
 </details>
 
