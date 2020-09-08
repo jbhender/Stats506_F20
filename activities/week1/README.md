@@ -70,10 +70,19 @@ you should edit.
    reformats these positions as a single, comma-separated string. The format of
    this string should be suitable for passing to the `-f` option of the `cut`
    command. 
+1. Copy the one-liner from step `<5>` as indicated. The syntax use here 
+   `cols=$(...)` stores the rsult of the command `...` in a variable `cols`.
+1. Use the results of step `<6>` to cut the appropriate columns from the RECS
+   data and save to the file indicated.
 
 ### Part 2 - Modify the previous script into an executable program. 
 
-We may skip this section depending on time. 
+1. Create a copy of your completed `week1_part1.sh` named `cutnames.sh`.
+1. Remove part `<7>`, comment out the message echoed at the start,
+   and then test your script directly at the command line:
+   `bash ./cutnames.sh > recs_brrweights2.csv`. Check that it produce the
+   desired results.
+1. 
 
 ## Hints
 
@@ -129,10 +138,10 @@ Try to accomplish each step on your own prior to viewing the hint.
   - How to pass the header row to a new command?
   - What command will translate commas to new line characters?
   - Where should the output go?
- 1. See `man tr`.
- 1. If you're not getting new lines from `tr` consider the difference in output
-    between: `echo \n` and `echo \\n`. Slashes represent escape characters and often
-    need to be repeated when parsed.
+ 2. See `man tr`.
+ 3. If you're not getting new lines from `tr` consider the difference in output
+    between: `echo \n` and `echo \\n`. Slashes represent escape characters and
+    often need to be repeated when parsed.
 
 </details>
  
@@ -148,6 +157,15 @@ Try to accomplish each step on your own prior to viewing the hint.
     For example, create a test file `echo a > test.txt; echo b >> test.txt` and observe
     that `<test.txt paste -s` and `cat test.txt | paste -s -` have the same output.
  
+</details>
+
+<details>
+  <summary> Step 7 Hint </summary>
+  
+ 1. Use file redirection (e.g `> recs_brrweights.csv`) to "save". 
+ 1. To extract the desired columns, use `cut` and pass the `cols` variable to
+    the "fields" option (`-f`). Be sure to use `$cols` to refer to its value.  
+    
 </details>
 
 ### Part 2
