@@ -20,7 +20,6 @@ echo $message
 ## if the file doesn't exist
 if [ ! -f "$file" ]; then
   ##<3> Use wget to download the file
- 
 fi
 
 # b - extract header row and output to a file with one name per line
