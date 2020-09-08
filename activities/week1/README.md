@@ -184,6 +184,18 @@ Try to accomplish each step on your own prior to viewing the hint.
 <details>
   <summary> Step 5 Hint </summary>
 
-</detials>
+ 1. The variable `pattern` should replace the regular expression used with `grep`.
+ 1. In your header, document whether `pattern` is passed to `-e` or `-E` as this
+    will determine how pattern should be used.
+
+</details>
+
+<details>
+  <summary> Step 6 Hint </summary>
+  
+  1. Replace the file redirection at the end of part 1, step 5 with a pipe.
+  1. Use line continuation `\` if needed to break up a long line. 
+
+</details>
 
   
