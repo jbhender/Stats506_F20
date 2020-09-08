@@ -78,11 +78,21 @@ you should edit.
 ### Part 2 - Modify the previous script into an executable program. 
 
 1. Create a copy of your completed `week1_part1.sh` named `cutnames.sh`.
-1. Remove part `<7>`, comment out the message echoed at the start,
+1. Remove part `<7>`, comment out or remove the message echoed at the start,
    and then test your script directly at the command line:
-   `bash ./cutnames.sh > recs_brrweights2.csv`. Check that it produce the
-   desired results.
-1. 
+   `bash ./cutnames.sh > recs_brrweights2.csv`. Check that it produces the
+   desired results. Repeat this test after each step below. 
+1. Remove step "a" for downloading the file and the `url` variable.
+1. Run `week1_part2_args.sh` as indicated in the header to see how to use
+   command line arguments by position in a shell script. Then, add 
+   `file=$1` and `pattern=$2` to the start of your `cutnames.sh` script. 
+   Document these arguments in the header.
+1. Use `pattern` in the appopriate place in the script.
+1. Finally, it would be nice to eliminate the temporary file `new_file`. Do
+   this by combining parts "b" and "c" into a single pipe used in side of 
+   the `cols=$(...)` construction.
+
+
 
 ## Hints
 
@@ -169,3 +179,11 @@ Try to accomplish each step on your own prior to viewing the hint.
 </details>
 
 ### Part 2
+
+
+<details>
+  <summary> Step 5 Hint </summary>
+
+</detials>
+
+  
