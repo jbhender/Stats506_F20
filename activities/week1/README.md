@@ -1,3 +1,28 @@
+## Groups
+
+This is a group activity. You can view your group and assigned role at:
+
+https://docs.google.com/spreadsheets/d/1r4OxLjU_oLbVDfyn7y066cc-Qe8HZNBE7zSDRKuoIlY/edit?usp=sharing
+
+If someone is absent, please assign their role to another member of your group.
+If you need to switch roles within your group, please edit the "roles" sheet
+as needed.
+
+### Roles
+
+Project Manager - The person in this role should keep the group on task
+by asking questions and making sure each member knows their role.
+Help with other roles as needed.
+
+Editor - The person in the Editor role should edit the group's 
+scripts and share their screen with the group during the breakout sessions. 
+
+Record Keeper - This person in this role should edit the google sheet with your
+group's progress during the breakout sessions.
+
+Questioner - The person in the questioner role should be prepared to ask the
+group's questions when the class reconvenes as a whole. 
+
 ## Week 1 - Shell scripting activity
 
 The direct link to this page is:
@@ -12,8 +37,8 @@ Prior to the activity, be sure to review the roles assigned to your group.
 If anyone from your group is absent, please assign there role to another member
 of the group.
 
-Record keeper: please record your groups progress at:
-
+Record keeper - please record your group's progress using the google sheet
+linked above.
 
 If the record keeper has trouble accessing the link, please sign into your
 umich gmail account: https://mail.umich.edu. 
@@ -198,4 +223,4 @@ Try to accomplish each step on your own prior to viewing the hint.
 
 </details>
 
-  
+
