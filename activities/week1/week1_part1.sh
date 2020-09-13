@@ -5,7 +5,7 @@
 # the shell scripting activity for week 1. 
 #
 # Author(s): James Henderson
-# Updated: August 16, 2020
+# Updated: September 13, 2020
 # 79: -------------------------------------------------------------------------
 
 # preliminary, so you know you've run the script
@@ -19,13 +19,15 @@ echo $message
 
 ## if the file doesn't exist
 if [ ! -f "$file" ]; then
-  ##<3> Use wget to download the file
+    ##<3> Use wget to download the file
+    echo "You will get an error if the body of an if statement is empty."
 fi
 
 # b - extract header row and output to a file with one name per line
 new_file="recs_names.txt"
 
 ## delete new_file if it is already present
+#? Can you spot and correct the error here?
 if [ -f "$file" ]; then
   rm "$new_file"
 fi
