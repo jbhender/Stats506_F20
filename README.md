@@ -3,7 +3,7 @@
 
 This repository `Stats506_F20` is for sharing code with 
 Stats 506 in Fall 2020. You will find acitivities,
-examples, case studies and for problem sets, both data and solutions.
+examples, case studies and both data and solutions for problem sets.
 
 Additional information is avaialble in the README files within each
 directory.
