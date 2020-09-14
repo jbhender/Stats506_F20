@@ -37,6 +37,7 @@ fi
 # c - get column numbers for DOEID and the BRR weights
 # as a comma separated string to pass to `cut`
 # <5> write your one liner below
+# < $new_file grep -n -E "DOEID|BRR" | cut -f? -d? | paste ???
 
 # <6> uncomment the next three lines and copy the one liner above
 #cols=$(
