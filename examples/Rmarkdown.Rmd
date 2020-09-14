@@ -1,0 +1,160 @@
+---
+title: "(R)Markdown "
+author: "<a href='./index.html'>Statistics 506, Fall 2020</a>" 
+date: 
+output: 
+  html_document:
+    theme: journal
+    highlight: pygments
+    css: ../../styles.css
+    toc: true
+
+---
+
+---
+
+## ![](../../icons/reading.png){width='25px'} Reading
+
+Everyone should read:
+
+  - [Github flavored markdown](https://guides.github.com/features/mastering-markdown)
+  - Chapter 27 of *R For Data Science* [Rmarkdown](https://r4ds.had.co.nz/r-markdown.html)
+  - Sections 29.1-29.4 in Chapter 29 of *R For Data Science* 
+    [Rmarkdown formats](https://r4ds.had.co.nz/r-markdown-formats.html)
+    
+Optional reading:
+
+  - Learn more about Rmarkdown from
+    [Get Started](https://rmarkdown.rstudio.com/lesson-1.html) on its
+    homepage. There is some overlap with Chapter 27 of *R4DS*. 
+  - Michael Clark's 
+    ["Rmarkdown"](https://m-clark.github.io/Introduction-to-Rmarkdown/)
+  - [Spin](https://deanattali.com/2015/03/24/knitrs-best-hidden-gem-spin/) 
+    I like to build reports and write markdown directly from R scripts (`.R`).
+  - The [kableExtra](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html)
+    package is incredibly useful for rendering professional looking tables. 
+
+---
+
+## ![](../../icons/reading.png){width='25px'} Markdown
+
+[Markdown](https://en.wikipedia.org/wiki/Markdown) is a plain text formatting 
+language designed to create html documents using plain text and
+indentation to specify the desired format
+while remaining easy to read in its raw format. Thanks to the magic of
+[Pandoc](https://pandoc.org/) Markdown can also be used to create PDF, MS Word,
+and other types of documents. 
+
+There are many "flavors" of markdown, but they all implement the core idea of 
+using simple plain text formats to specify the desired markup.  For this course
+the two most relevant markdown "flavors" are 
+[Github flavored markdown](https://guides.github.com/features/mastering-markdown)
+and [Rmarkdown](http://rmarkdown.rstudio.com/). 
+
+---
+
+## ![](../../icons/Observe.png){width='25px'} Rmarkdown
+
+This document was written in [Rmarkdown](http://rmarkdown.rstudio.com/)
+using RStudio. You can see the source at 
+[Stats506_F20](https://github.com/jbhender/Stats506_F20/tree/master/examples).
+
+You will use Rmarkdown for all assignments in the course.  To begin, you should
+familiarize yourself with the basic formatting options specified under 
+"Examples" from [Github flavored markdown](https://guides.github.com/features/mastering-markdown/).
+
+In addition, you should learn to:
+  
+  a. Knit your R markdown documents using a shortcut key, i.e. 
+     `cmd+shift+enter` or `ctrl+shift+enter`
+  
+  a. Knit programmatically using `rmarkdown::render()`. 
+  
+  a. Include plots and tables (`knitr::kable()`) in your documents.
+
+Templates for problem sets are available at
+[Stats506_F20](https://github.com/jbhender/Stats506_F20/tree/master/problem_sets/templates).
+
+---
+
+## ![](../../icons/Observe.png){width='25px'} `LaTex`
+
+You can include math in your Rmarkdown documents using `LaTex`. `LaTex` is a 
+typesetting program and markup language popular for writing scientific articles,
+especially within the mathematical sciences. If you've never
+used `LaTex` before, here are the basics.
+
+ 1. Use math inline by enclosing it between dollar signs. For instance,
+    `$Y|X \sim \mathrm{N(X\beta, \sigma^2I_{n,n})}$` becomes 
+    $Y|X \sim \mathrm{N(X\beta, \sigma^2I_{n,n})}$.
+
+ 1. Use escaped commands for special symbols, e.g. Greek letters `\Sigma` for
+    $\Sigma$. 
+
+ 1. Create equation displays using a math mode environment `\[ \]`, e.g.
+ 
+ ```Latex
+ \[
+  \begin{align}
+  {n \choose k} &= \frac{n!}{(n-k)!k!} \\
+                &= \frac{\prod_{i=1}^n i}{ \left(\prod_{i=1}^{n-k} i \right)
+                                           \left(\prod_{j=1}^k j \right) } \\
+                &= \frac{ \prod_{i=(n-k+1)}^n i}{\prod_{j=1}^k j} \\
+                &= \frac{ (n-k+1) \times \dots \times n}{2 \times \dots k}
+  \end{align}
+ \]
+ ```
+becomes
+ \[
+  \begin{align}
+  {n \choose k} &= \frac{n!}{(n-k)!k!} \\
+                &= \frac{\prod_{i=1}^n i}{ \left(\prod_{i=1}^{n-k} i \right)
+                                           \left(\prod_{j=1}^k j \right) } \\
+                &= \frac{ \prod_{i=(n-k+1)}^n i}{\prod_{j=1}^k j} \\
+                &= \frac{ (n-k+1) \times \dots \times n}
+                   {2 \times \dots \times k}
+  \end{align}
+ \]
+
+Those new to `LaTex` may also find the section 
+[Math in Rmarkdown](http://www.stat.cmu.edu/~cshalizi/rmarkdown/#math-in-r-markdown)
+of Cosma Shalizi's Rmarkdown notes helpful. 
+
+For a comprehensive list of symbols available in `LaTex` and their escaped 
+commands refer to:
+http://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf
+
+You also must have a `LaTex` distribution available for Pandoc to turn your 
+markdown into a pdf document:  
+<center> 
+`.Rmd` $\rightarrow_{\mathrm{knitr}}$ `.md` $\rightarrow_{\mathrm{pandoc}}$
+  `.tex` $\rightarrow_{\mathrm{LaTex}}$ `.pdf`.
+</center>
+
+---
+
+## ![](../../icons/code_style.png){width='25px'} Style Notes
+
+When using Rmarkdown for problem sets:
+
+ - Separate problems from one another by:
+   - For pdf documents, using page breaks in Latex: `\pagebreak`,
+   - For HTML documents, using a horizontal rule MD: `---`, (Latex: `\hrule`).
+
+ - Avoid using italics for functions when writing `LaTex`. Good: 
+   `$\log x$` = $\log x$. Bad: `$log x$` = $log x$.
+
+ - Label all R chunks in your Rmarkdown documents.  
+ 
+ - Think carefully about use of chunk options, 
+   e.g. `message`, `echo`, `include`.
+   
+ - Strive to submit professional looking, "polished" documents. Knit often and
+   leave yourself time for one or two proofreading edits.
+   
+ - Do the bulk of your data processing and cleaning in R script (`.R`) and not
+   in Rmarkdown (`.Rmd`). Analysis can also be done in an R script. 
+   You can `source()` this script (or scripts) from the Rmarkdown document or 
+   load in a clean data file.  
+   
+

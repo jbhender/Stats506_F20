@@ -23,7 +23,7 @@ The files in this folder are briefly described below:
 
  1. `week1_part1_solution.sh` - is not there yet, but will be posted after Sep 15.
 
-## week2
+### week2
 
 Details to come prior to Sep 15.
 
