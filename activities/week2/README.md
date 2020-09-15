@@ -28,7 +28,6 @@ group's questions when the class reconvenes as a whole.
 The direct link to this page is:
 https://github.com/jbender/Stats506_F20/tree/master/activities/week2/
 
-## Part 1
 
 ### Question 1
 For each snippet of **R** code below, compute the value of `z` without using
@@ -114,27 +113,30 @@ z = floor( e1 / e0 )
 
 Consider an arbitrary *data.frame* `df` with columns `a`, `b`, and `c`. 
 
-  i. Which of the following is not the same as the others? 
-   a. `df$a`
-   a. `df[1]`
-   a. `df[['a']]`
-   a. `df[, 1]`
+i. Which of the following is not the same as the others? 
+  
+  a. `df$a`
+  a. `df[1]`
+  a. `df[['a']]`
+  a. `df[, 1]`
     
-  ii. Which of the following are equivalent to `length(df)`? 
+ii. Which of the following are equivalent to `length(df)`? 
       Choose all that apply.
-   a. `nrow(df)`
-   a. `ncol(df)`
-   a. `3 * nrow(df)`
-   a. `length(df[['a']])`
-   a. `length(df[1:3])`
+      
+  a. `nrow(df)`
+  a. `ncol(df)`
+  a. `3 * nrow(df)`
+  a. `length(df[['a']])`
+  a. `length(df[1:3])`
     
-  iii. Which of the following are equivalent to `length(df$a)`? 
-       Choose all that apply.
-   a. `nrow(df)`
-   a. `ncol(df)`
-   a. `3 * nrow(df)`
-   a. `length(df[['a']])`
-   a. `length(df[1:3])`
+iii. Which of the following are equivalent to `length(df$a)`? 
+     Choose all that apply.
+       
+  a. `nrow(df)`
+  a. `ncol(df)`
+  a. `3 * nrow(df)`
+  a. `length(df[['a']])`
+  a. `length(df[1:3])`
    
 ### Question 4
 
