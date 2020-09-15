@@ -18,10 +18,12 @@ Thanks for your cooperation!
 
 Project Manager - The person in this role should keep the group on task
 by asking questions and making sure each member knows their role.
-Help with other roles as needed.
+Set up a Google Chat for the group if any members need to participate by
+chat only. Help with other roles as needed.
 
 Editor - The person in the Editor role should edit the group's 
-scripts and share their screen with the group during the breakout sessions. 
+scripts (none this week) and share their screen with the group as needed
+during the breakout sessions. 
 
 Record Keeper - This person in this role should edit the google sheet with your
 group's progress during the breakout sessions.
