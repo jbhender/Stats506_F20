@@ -115,9 +115,9 @@ Consider an arbitrary *data.frame* `df` with columns `a`, `b`, and `c`.
 
 i. Which of the following is not the same as the others? 
   
-  a. `df$a`  
-  a. `df[1]`  
-  a. `df[['a']]`  
+  a. `df$a` 
+  a. `df[1]` 
+  a. `df[['a']]` 
   a. `df[, 1]`  
     
 ii. Which of the following are equivalent to `length(df)`? 
