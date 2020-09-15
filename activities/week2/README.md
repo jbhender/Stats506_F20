@@ -115,28 +115,28 @@ Consider an arbitrary *data.frame* `df` with columns `a`, `b`, and `c`.
 
 i. Which of the following is not the same as the others? 
   
-  a. `df$a` 
-  a. `df[1]` 
-  a. `df[['a']]` 
-  a. `df[, 1]`  
+  a. `df$a`  
+  b. `df[1]`  
+  c. `df[['a']]`  
+  d. `df[, 1]`  
     
 ii. Which of the following are equivalent to `length(df)`? 
       Choose all that apply.
       
-  a. `nrow(df)`
-  a. `ncol(df)`
-  a. `3 * nrow(df)`
-  a. `length(df[['a']])`
-  a. `length(df[1:3])`
+  a. `nrow(df)`  
+  b. `ncol(df)`  
+  c. `3 * nrow(df)`  
+  d. `length(df[['a']])`  
+  e. `length(df[1:3])`  
     
 iii. Which of the following are equivalent to `length(df$a)`? 
      Choose all that apply.
        
-  a. `nrow(df)`
-  a. `ncol(df)`
-  a. `3 * nrow(df)`
-  a. `length(df[['a']])`
-  a. `length(df[1:3])`
+  a. `nrow(df)`  
+  b. `ncol(df)`  
+  c. `3 * nrow(df)`  
+  d. `length(df[['a']])`  
+  e. `length(df[1:3])`  
    
 ### Question 4
 
