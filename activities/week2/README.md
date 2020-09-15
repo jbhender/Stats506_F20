@@ -8,6 +8,12 @@ If someone is absent, please assign their role to another member of your group.
 If you need to switch roles within your group, please edit the "roles" sheet
 as needed.
 
+If you see 'chat only' in the notes for a group member, please log into your umich
+Gmail account.  Then, have the project manager
+open a google chat for the group.  On the left-hand menu, click the `+` next to
+'chat' and then select 'start a group conversation' and add your group members.
+Thanks for your cooperation!
+
 ### Roles
 
 Project Manager - The person in this role should keep the group on task
