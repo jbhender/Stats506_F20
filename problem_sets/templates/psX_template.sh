@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!usr/bin/env bash
 
 # Stats 506, Fall 2020
 #
