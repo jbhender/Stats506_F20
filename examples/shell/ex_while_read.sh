@@ -13,7 +13,7 @@
 echo Version 1
 while read col1 col2
 do
-    echo $col1 $col2
+    echo $col2 $col1
 done < nhanes_files.txt
 
 ## version 2
@@ -22,5 +22,10 @@ while read col1 col2; do
     echo $col1 $col2
 done < nhanes_files.txt
 
+## version 3
+echo Version 3
+while read line; do
+    echo $line
+done < nhanes_files.txt
 
 # 79: -------------------------------------------------------------------------
