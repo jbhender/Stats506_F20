@@ -3,10 +3,11 @@ title: "Stats 506, F20, Problem Set X"
 author: "Your Name, email@umich.edu"
 date: "`r format.Date(Sys.Date(), '%B %d, %Y')`"
 output: pdf_document
+     
 ---
 
 ```{r setup, include=FALSE}
-# 79: --------------------------------------------------------------------------
+# 79: -------------------------------------------------------------------------
 #! We generally don't need to see the code in the results document.
 knitr::opts_chunk$set(echo = FALSE)
 #! Make sure all chunks have a label. This one is labelled 'setup'.
@@ -36,12 +37,15 @@ Please start each question on a new page in pdf documents.
 # Create a plot for the `pressure` data as in the default Rmd file: -----------
 #! Use `paste` to construct captions while respecting the 79 char limit.
 cap = paste0(
- "**Figure 1.** *Title.* All figures and tables should be numbered, titled ",
+ "*Title.* All figures and tables should be numbered, titled ",
  "and have a descriptive caption."
 )
 
 plot(pressure)
 ```
+
+There are `r nrow(pressure)` observations in the `pressure` data.
+
 \pagebreak
 
 ## Question 3: Other considerations.
