@@ -16,9 +16,9 @@ syntax for useful shell programming patterns. Here are short descriptions:
 
  - `dups.txt`, `nhanes_files.txt` example text files for use with the
     shell examples.
- - `ex_while_read.sh` Illustrates the `while read` pattern for looping.
- - `ex_check_dup_lines.sh` Illustrates checking for duplicate lines in
+ - `ex_while_read.sh` illustrates the `while read` pattern for looping.
+ - `ex_check_dup_lines.sh` illustrates checking for duplicate lines in
     a file using `sort`, `uniq`, `wc` and an `if` statement. The `if`
-    statement syntax here is for bash and may error in other shell,
+    statement syntax here is for bash and may error in other shells,
     e.g. zsh.
     
