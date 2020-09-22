@@ -23,7 +23,7 @@ chat only. Help with other roles as needed.
 
 **Editor** - The person in the Editor role should share their screen with the
 group as needed during the breakout sessions to demo key steps for other group
-membmers. 
+members. 
 
 **Record Keeper** - This person in this role should edit the google sheet 
 with your group's progress during the breakout sessions. Update a step to "done"
