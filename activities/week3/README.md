@@ -68,12 +68,29 @@ activity.
 In this part, you'll practice using branches in git. 
 
  1. In your `Stats506_public` repository, create a new branch `week1` using:
-    `git branch week1`.  Type `git branch` to list available branches. 
+    `git branch week1`.  Type `git branch` to list available branches. Checkout
+    the `week1` branch using `git checkout week1`. 
 
- 1. Create a folder `activities/week1` in your repository and add the shell 
-    scripts your group wrote during the week 1 activity. Create a new README.md
-    file within `activities` and briefly describe each of these file. If not 
-    all group members have this file, you may want to clone the week1 editor's
-    repo (after they complete this step) and then copy the shell scripts there
-    to your repo. 
+ 1. While on the `week1` branch, create a folder `activities/week1` in your
+    repository and copy the shell scripts your group wrote during the week 1
+    activity to this folder. Create a new README.md file within `activities`
+    and briefly describe each of these files. Add and commit these changes. 
+    
+    **Hint:** If not all group members have this file, you may want to clone 
+    the week1 editor's repo (after they complete this step) and then copy the
+    shell scripts there to your repo. 
+    
+ 1. In this step you will push the `week1` branch you just created to the 
+    remote (`origin`). However, this branch does not yet have an upstream 
+    remote so push using: `git push --set-upstream origin week1`. 
+    
+ 1. Checkout the `master` branch using `git checkout master`.  Are the files 
+    you just added still in the file tree? Hopefully "no" as these files were
+    add to the file tree while on the `week1` branch. Merge your changes from
+    the week 1 branch into the `master` branch using (from the master branch):
+    `git merge week1`.
+
+ 1. If the last step completed successfully, delete the `week1` branch (not 
+    the week1 folders) using `git branch -d week1`. Verify this by listing
+    the branches `git branch`. 
     
