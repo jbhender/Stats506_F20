@@ -21,4 +21,6 @@ syntax for useful shell programming patterns. Here are short descriptions:
     a file using `sort`, `uniq`, `wc` and an `if` statement. The `if`
     statement syntax here is for bash and may error in other shells,
     e.g. zsh.
+ - `ex_variable_expansion.sh` demonstrates the difference between single
+    and double quotes in terms of the latter allowing variable expansion.
     
