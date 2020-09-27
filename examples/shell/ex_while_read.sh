@@ -1,4 +1,4 @@
-#!usr/bin/env bash
+#!/usr/bin/env bash
 
 # 79: -------------------------------------------------------------------------  
 # Example showing the `while read` loop pattern for shell scripting

@@ -48,7 +48,7 @@ activity.
 
  1. Go to https://www.github.com, login to your account, and create a public
     git repository named `Stats506_public`. Initialize your repository with a
-    a README.md file.
+    README.md file.
     
  1. Clone the repository to your local computer and edit the README.md with a
     short "About" section. In the "About" section include links to the course

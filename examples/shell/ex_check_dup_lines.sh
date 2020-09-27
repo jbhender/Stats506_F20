@@ -1,4 +1,4 @@
-#!usr/bin/env bash
+#!/usr/bin/env bash
 
 # 79: -------------------------------------------------------------------------  
 # Example showing how to check for duplicate lines in a file from the shell.
