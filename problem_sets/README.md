@@ -13,6 +13,7 @@ the various languages used in the course.  Currently, this contains:
  1. `psX_template.Rmd` - a template for Rmd files
  1. `psX_spin_template.R` - the Rmd template converted for use with
      `kintr::spin()`.
+ 1. `psX_template.do` - A `.do` file template for Stata scripts. 
 
 ## Data
 
