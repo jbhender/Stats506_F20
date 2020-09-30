@@ -110,7 +110,7 @@ summary results from an analysis of the 2015 RECS data comparing the proportion
 of homes with internet access by Urban (including Urban Cluster) and Rural
 status within each Census Division. 
 
-Use the provided template [week4_part2_solution.Rmd](week4_part2_solution.Rmd)
+Use the provided template [week4_part2.Rmd](week4_part2.Rmd)
 to produce your solution. Some preparatory work is done for you to facilitate
 plotting, but you may need to make additional changes to the input data 
 structure. 
