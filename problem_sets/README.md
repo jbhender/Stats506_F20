@@ -27,5 +27,5 @@ the various languages used in the course.  Currently, this contains:
 ## Solutions
 
  - [ps1](./solutions/ps1/) Solutions to
-   [Problem Set 1](https://jbhender.github.io/Stats506/F20/PS1.html
+   [Problem Set 1](https://jbhender.github.io/Stats506/F20/PS1.html)
 
