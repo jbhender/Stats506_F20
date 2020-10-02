@@ -23,3 +23,9 @@ the various languages used in the course.  Currently, this contains:
     for the [isolet data](https://archive.ics.uci.edu/ml/machine-learning-databases/isolet/).
     The predictions are taken from a logistic model fit using ridge
     regression to the training data (`isolet+1+2+3+4.data`). 
+
+## Solutions
+
+ - [ps1](./solutions/ps1/) Solutions to
+   [Problem Set 1](https://jbhender.github.io/Stats506/F20/PS1.html
+

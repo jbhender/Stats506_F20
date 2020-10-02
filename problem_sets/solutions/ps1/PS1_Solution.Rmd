@@ -1,0 +1,156 @@
+---
+title: "Problem Set 1 Solution, Stats 506, F20"
+author: "James Henderson, PhD"
+date: "`r format.Date(Sys.Date(), '%B %d, %Y')`"
+output: 
+  html_document:
+    code_folding: hide
+    theme: united
+    highlight: pygments
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## About
+This is an example solution to Problem Set 1 for Stats 506 in Fall 2020. 
+
+To build this document, run 
+`Rscript -e "rmarkdown::render('./PS1_solution.Rmd')"` at the command line.
+
+To run all scripts in this assignment run `bash ./ps1_make.sh`. 
+
+## Question 1
+In question 1, you were asked to write shell scripts to download and prepare
+data from the NHANES surveys. 
+
+### Part a 
+The script for part "a" is `ps1_q1_ohxden.sh`. This script first loops over 
+the cohort identifiers and file name suffixes listed in 
+`ps1_nhanes_files.txt` and downloads the oral health dentition examination
+data for the specified years. We then use the included `cutnames.sh` utility
+to identity the requested columns and, after verifying they all appear in 
+the same order, extract the data in these columns and append into a single
+multi-cohort file.
+
+<details> 
+<summary> Click to see the contents of `ps1_nhanes_files.txt`. </summary>
+```{r q1_files, comment=""}
+writeLines(readLines('./ps1_nhanes_files.txt'))
+```
+</details>
+
+<details>
+<summary> Click below to see the script `ps1_q1_ohxden.sh`.  
+</summary>
+```{r q1a, comment="", results="asis"}
+ writeLines(c('```bash', readLines('./ps1_q1_ohxden.sh'), '```'))
+```
+</details>
+
+The script produces an appended csv file with the following numbers of rows
+and columns.
+
+```{bash q1asize, comment = ""}
+echo $(wc -l nhanes_ohxden.csv | cut -d' ' -f4) rows including header
+echo $(< nhanes_ohxden.csv head -n1 | tr ',', ' ' | wc -w | tr '  ' ' ') columns
+```
+
+### Part b
+
+In this part you were asked to modify the script from part "a" to download, 
+extract, and append demographic data for the same set of cohorts. The only 
+changes needed were to the file name and the regular expression used by 
+`cutnames.sh` for extracting columns.  
+
+<details>
+<summary> Click below to see the script `ps1_q1_demo.sh`.  
+</summary>
+```{r q1b, comment="", results="asis"}
+ writeLines(c('```bash', readLines('./ps1_q1_demo.sh'), '```'))
+```
+</details>
+
+The script produces the file `nhanes_demo.csv` which has the following 
+dimensions. 
+
+```{bash q1bsize, comment = ""}
+echo $(wc -l nhanes_demo.csv | cut -d' ' -f4) rows including header
+echo $(< nhanes_demo.csv head -n1 | tr ',', ' ' | wc -w | tr '  ' ' ') columns
+```
+
+---
+
+## Question 2
+
+### Functions
+In question 2 you were asked to write functions for creating, plotting, and
+computing the area under ROC and PR curves. In the solution, you will see a 
+function `.perf_counts()` which counts the true and false positives and 
+negatives associated with each unique value of the predictor `yhat`.  This
+function is used by `perf_roc()` and `perf_pr()`. 
+
+The example solution for this question is in the file `ps1_q2.R`. 
+<details>
+<summary> Click to view `ps1_q2.R`. </summary>
+```{r q2script, comment = "", results = "asis"}
+writeLines(c('```R', readLines('./ps1_q2.R'), '```'))
+```
+</details>
+
+### Results on the isolet data {.tabset .tabset-fade .tabset-pills}
+
+```{r q2results, comment = "", message = FALSE}
+# libraries: ------------------------------------------------------------------
+library(tidyverse)
+
+# functions: ------------------------------------------------------------------
+source('./ps1_q2.R')
+
+# isolet data: ----------------------------------------------------------------
+path = './'
+file = sprintf('%s/isolet_results.csv', path)
+isolet = read.table(file, sep = ',', header = TRUE)
+
+# areas under the curve: ------------------------------------------------------
+auc = with(isolet, perf_roc(yhat, y, 'none'))$auc_roc
+pr = with(isolet, perf_pr(yhat, y, 'none'))$auc_pr
+```
+
+For the `isolet_results` data with predictions `yhat` of whether `y` is a vowel
+(1) or consonant (2), the areas under the curve are: 
+
+  + AUC ROC `r sprintf('%4.2f', auc)`
+  + AUC PR `r sprintf('%4.2f', pr)`. 
+
+Use the buttons below to select the desired plot.
+
+#### ROC ggplot
+
+```{r q2_roc_ggplot, fig.cap = cap1}
+cap1 = '**Figure 1 (ggplot2)**. *ROC curve for the isolet data.*'
+with(isolet, perf_roc(yhat, y, 'ggplot2'))
+```
+
+#### ROC base
+
+```{r q2_roc_base, fig.cap = cap2}
+cap2 = '**Figure 1 (base).** *ROC curve for the isolet data.*'
+with(isolet, perf_roc(yhat, y, 'base'))
+```
+
+#### PR ggplot
+
+```{r q2_pr_ggplot2, fig.cap = cap3}
+cap3 = '**Figure 2 (ggplot2).** *Precision-recall curve for the isolet data.*'
+with(isolet, perf_pr(yhat, y, 'ggplot2'))
+```
+
+#### PR base
+
+```{r q2_pr_base, fig.cap = cap4}
+cap4 = '**Figure 2 (base).** *Precision-recall curve for the isolet data.*'
+with(isolet, perf_pr(yhat, y, 'base'))
+```
+

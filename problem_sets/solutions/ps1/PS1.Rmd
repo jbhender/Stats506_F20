@@ -1,0 +1,152 @@
+---
+title: "Problem Set 1"
+author: "<a href='./index.html'>Statistics 506, Fall 2020</a>" 
+date: "Due: Monday September 28, by 7pm"
+output: 
+  html_document:
+    theme: journal
+    highlight: pygments
+    css: ../../styles.css
+---
+
+## Instructions
+
+  + Submit the assignment by the due date via Canvas. Assignments may be 
+  submitted up to 72 hours late for a 5 point reduction. 
+
+  + All files read, sourced, or referred to within scripts should be assumed to
+    be in the same working directory (`./`).
+  
+  + Your code should be clearly written and it should be possible to assess it
+    by reading it. Use appropriate variable names and comments. Your style
+    will be graded using the [style rubric](./StyleRubric.html) [15 points].
+
+  + Some of these exercises may require you to use commands or techniques
+    that were not covered in class or in the course notes. You can use the web
+    as needed to identify appropriate approaches. Part of the purpose of these
+    exercises is for you to learn to be resourceful and self sufficient. 
+    Questions are welcome at all times, but please make an attempt to locate
+    relevant information yourself first.
+    
+  + Please use the provided 
+    [templates](https://github.com/jbhender/Stats506_F20/tree/master/problem_sets/templates/).
+    
+  + Your submission should include a write-up as a pdf or HTML document and
+    all scripts needed to reproduce. In your document, describe how the files
+    submitted related to one another and be sure to answer the questions.     
+    Scripts for this assignment you should submit: shell (`.sh`), R (`.R`), 
+    Rmarkdown (`.Rmd` or `.R` with spin) for the write-up, and the write up 
+    itself (`.pdf` or `.html`.)
+    
+## Questions
+
+### Question 1 [45 points]
+
+In this question you will use the Linux shell to prepare data from the 
+National Health and Nutrition Examination Survey 
+([NHANES](https://www.cdc.gov/nchs/nhanes/index.htm)) conducted by the
+National Center for Health Statistics every two years.
+
+Specifically, we are going to prepare data from the Oral Health Dentition
+examinations and participant demographics. We will do additional analyses with 
+the data files you create in one or more future problem sets. In your write up
+tell us how many observations and variables are present in each of the resulting
+data sets. 
+
+a. [30 points] Write a shell script `ps1_q1_ohxden.sh` that:
+
+   i. downloads the `OHXDEN_?.XPT` data files for all
+     survey cohorts between 2011-2018 (4 cohorts),
+   i. converts these files to csv,
+   i. extracts the following columns: id (`SEQN`), 
+       dentition exam status (`OHDDESTS`), tooth counts (`OHXxxTC`), and
+       coronal caries (`OHXxxCTC`),
+   i. appends all years into a single file `nhanes_ohxden.csv`.
+
+
+b. [15 points] Write a shell script `ps1_q1_demo.sh` that repeats the steps 
+   from part *a* for the demographic data and extracts the columns: 
+   id (`SEQN`), age (`RIDAGYR`), race/ethnicity (`RIDRETH3`),
+   education (`DMDEDUC2`), marital status (`DMDMARTL`), and variables related
+   to the survey weights (`RIDSTATR`, `SDMVPSU`, `SDMVSTRA`, `WTMEC2YR`, 
+   `WTINT2YR`). Name the appended file `nhanes_demo.csv`. 
+      
+To receive full credit, your solutions should:
+  
+  i.   be written in the `bash` shell,
+  ii.  use conditional execution to avoid repeating already completed steps,
+  iii. verify that the extracted columns are all in the same order prior
+       to appending [5 points, included above]
+  iv.  Uses looping to avoid unneeded repetition (*DRY*). 
+
+For the style component of the grade, ensure each of your solutions:
+  i.  has a complete header and "shebang" (`!#`), 
+  ii. follows style guidelines on line length ($\le 79$ characters) and 
+      variable names.
+
+#### Hints:
+
+ 1. Use R via the `Rscript` utility for converting the `XPT` format to `csv`.
+ 1. Use the `cutnames.sh` program from part 2 of the week 1 activity to extract
+    variables. If you use my solution, provide attribution in your write up. If
+    you use your (group's) solution, include the file with your submission. 
+ 1. For looping, see the `ex_while_read.sh` example in the 
+    [Stats506_F20](https://github.com/jbhender/Stats506_F20/) repo. 
+ 1. To check that columns of interest are ordered the same across all files,
+    create a temporary file with *only* the extracted headers from each data 
+    file and adapt the pattern from the `ex_check_dup_lines.sh` in the 
+    [Stats506_F20](https://github.com/jbhenders/Stats506_F20/) repo. 
+
+### Question 2 [40 points] 
+
+In this question you will write functions in R to evaluate binary prediction 
+models using the receiver operator characteristic
+([ROC](https://en.wikipedia.org/wiki/Receiver_operating_characteristic))
+and precision recall curve
+([PR](https://en.wikipedia.org/wiki/Precision_and_recall)).  You should write
+your own functions using default packages and/or tidyverse, rather than 
+writing "wrappers" to existing functions for these specific tasks. Try to write
+*vectorized* code avoiding loops -- a concept we will discuss further in the
+next few weeks.
+
+a. [15 points] Write a function `perf_roc()` taking two required arguments:
+   `y` for the true binary labels and `yhat` for a continuous or ordinal 
+   predictor which, when combined with a threshold `tau`, predicts `y` via
+   `yhat >= tau`. Also include an argument 
+   `plot = c("none", "base", "ggplot2")`indicating whether to produce a plot
+   showing the ROC curve, and, if so, whether it should be produced with base
+   R graphics or ggplot2. Your function should return a named list containing:
+   
+   i. an 7-column `data.frame` (or `tibble`) with sorted, unique values of
+      `yhat`, counts of true/false positives/negatives when `tau == yhat` for
+      the value of `yhat` in that row,
+      and the sensitivity and specificity associated with each threshold.
+      
+   ii. The area under the ROC curve, evaluated using the 
+       [trapezoidal rule](https://en.wikipedia.org/wiki/Trapezoidal_rule).
+   
+a. [15 points] Write a function `perf_pr()` similar to `perf_roc()` but
+   replacing specificity with precision and renaming sensitivity as recall.
+   This function should also compute the area under the precision-recall curve.
+   
+a. [10 points] Use your functions to evaluate the predictions in the file
+   `problem_sets/data/isolet_restults.csv` in the 
+   [Stats506_F20](https://github.com/jbhender/Stats506_F20/) repo. In your
+   write up, report both the AUC-ROC and the AUC-PR and include both the base R
+   and ggplot2 versions of your plots showing the curves. 
+   
+#### Hints: 
+
+1. To avoid repeating yourself, consider writing helper functions, e.g. to 
+   sort the predictions and count the true/false positives/negatives.
+1. Be sure to document each of your functions using a comment in the opening
+   lines of the function body.  Use the following format:
+    a. Brief 1-line description of what the function does 
+    a. Write `#Inputs` then list each with an explanation of what the
+       required classes/types are and what the role of that specific variable
+       is.
+    a. Write `#Outptut` and describe the output.
+1. See the ROC Wikipedia page linked above 
+   for the relationship between the AUC ROC and the Gini coefficient to better
+   understand the connection to integration using the trapezoidal rule.
+1. See `?match.arg()` for help in resolving the `plot` argument. 
