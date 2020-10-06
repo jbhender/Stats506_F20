@@ -48,7 +48,7 @@ summary results from an analysis of the 2015 RECS data comparing the proportion
 of homes with internet access by Urban (including Urban Cluster) and Rural
 status within each Census Division. 
 
-Use the provided template [week4_part2.Rmd](week4_part2.Rmd)
+Use the provided template [week4_part2.Rmd](../week4/week4_part2.Rmd)
 to produce your solution. Some preparatory work is done for you to facilitate
 plotting, but you may need to make additional changes to the input data 
 structure. 
@@ -69,7 +69,10 @@ structure.
 
 3. Push your results to the `week5` folder of your `Stats506_public` repo. 
    In your README, include the plots you produced using the markdown syntax:
-   `![](./your_plot.png)`. Your plots should also be pushed to the repo.
+   `![](./your_plot.png)`.
+   As an alternative, you could also use an html image tag
+   `<img src="./your_plot.png" height="50%" width="50%">`.
+   Your plots should also be pushed to the repo.
    (If you finished this last week, just point to the week 4 folder with a link.)
 
 ### Part 2 - Peer Review
