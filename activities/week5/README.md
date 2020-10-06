@@ -63,7 +63,7 @@ structure.
 
 2. Here is the target plot for q2. 
 
-![](../week4/w4_p2_q2_plot.png)
+<img src="../week4/w4_p2_q2_plot.png" height="50%" width="50%">
 
 ---
 
