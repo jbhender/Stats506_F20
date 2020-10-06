@@ -57,7 +57,7 @@ structure.
 
 1. Here is the plot you are targeting for q1.
 
-![](../week4/w4_p2_q1_plot.png)
+![](../week4/w4_p2_q1_plot.png){:height="50%" width="50%"}
 
 ---
 
