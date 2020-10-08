@@ -23,4 +23,25 @@ syntax for useful shell programming patterns. Here are short descriptions:
     e.g. zsh.
  - `ex_variable_expansion.sh` demonstrates the difference between single
     and double quotes in terms of the latter allowing variable expansion.
+
+### Stata
+
+ - `ex_io.do` - I/O commands: sysuse, clear, import delimited,
+    export delimited, save
+
+ - `ex_loops.do` - looping types with iterator as local macro
+
+ - `ex_macros.do` - creating and acessing local macros; evaluate
+    vs unevaluated macros.
+
+
+### R
+
+ - `ggplot_ex1.R` illustrate options for using aesthetics like color, shape
+    together with facets and dodged positions to emphasize specfic comparisons.
     
+### data
+ - `recs2015_temps.RData` contains point and interval estimates for the
+   average residential home temperatue in winter at 3 times of day by
+   Census Division and urban type.  Estimates are from RECS 2015.
+   
