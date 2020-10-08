@@ -37,11 +37,15 @@ syntax for useful shell programming patterns. Here are short descriptions:
 
 ### R
 
- - `ggplot_ex1.R` illustrate options for using aesthetics like color, shape
+ - `ggplot_ex1.R` illustrates options for using aesthetics like color, shape
     together with facets and dodged positions to emphasize specfic comparisons.
+
+ - `tables_ex1.R` illustrates options for organizing tables 
+    to emphasize specfic comparisons.
     
 ### data
+
  - `recs2015_temps.RData` contains point and interval estimates for the
-   average residential home temperatue in winter at 3 times of day by
-   Census Division and urban type.  Estimates are from RECS 2015.
+    average residential home temperatue in winter at 3 times of day by
+    Census Division and urban type.  Estimates are from RECS 2015.
    
