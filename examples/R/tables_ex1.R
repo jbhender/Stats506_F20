@@ -23,8 +23,10 @@ foo = load(sprintf('%s/recs2015_temps.RData', path)) #temps
 
 # format for table presentation: ----------------------------------------------
 temps = temps %>%
-  mutate( avg_temp = sprintf('%4.1f (%4.1f, %4.1f)', est, lwr, upr),
-          avg_temp2 = sprintf('<div> %4.1f </div> <div>(%4.1f, %4.1f)</div>', est, lwr, upr)
+  mutate( 
+    avg_temp = sprintf('%4.1f (%4.1f, %4.1f)', est, lwr, upr),
+    avg_temp2 = 
+      sprintf('<div> %4.1f </div> <div>(%4.1f, %4.1f)</div>', est, lwr, upr)
   )
 
 # option 1: -------------------------------------------------------------------
@@ -32,15 +34,16 @@ temps = temps %>%
 # rows - type, division
 
 table1 = temps %>%
-  pivot_wider(id_cols = c('type', 'division'),
-              names_from = 'urban',
-              values_from = 'avg_temp', 
-              ) %>%
+  pivot_wider(
+    id_cols = c('type', 'division'),
+    names_from = 'urban',
+    values_from = 'avg_temp', 
+  ) %>%
   arrange(type, division) %>%
   rename(`Census Division` = division) %>%
   select(!type) %>%
   knitr::kable(format = 'html') %>%
-  kableExtra::kable_styling('striped', full_width = TRUE) #
+  kableExtra::kable_styling('striped', full_width = TRUE) 
 
 ## group by type
 types = with(temps, unique(type))
@@ -68,9 +71,10 @@ table1
 # rows - division, type
 
 table2 = temps %>%
-  pivot_wider(id_cols = c('division', 'type'),
-              names_from = 'urban',
-              values_from = 'avg_temp', 
+  pivot_wider(
+    id_cols = c('division', 'type'),
+    names_from = 'urban',
+    values_from = 'avg_temp', 
   ) %>%
   arrange(division, type) %>%
   rename(`Temperature Type` = type) %>%
@@ -79,7 +83,7 @@ col_names = names(table2)
 col_names[1] = '  '
 table2 = table2 %>%
   knitr::kable(format = 'html', col.names = col_names) %>%
-  kableExtra::kable_styling('striped', full_width = TRUE) #
+  kableExtra::kable_styling('striped', full_width = TRUE) 
 
 ## group by division
 divs = with(temps, unique(division))
@@ -94,17 +98,18 @@ for ( i in 1:length(divs) ) {
       end_row = i * n_types
     ) 
 }
-table2
 
 # option 3: -------------------------------------------------------------------
 # columns - urban, type
 # rows - division
 
 table3 = temps %>%
-  pivot_wider(id_cols = c('division'),
-              names_from = c('urban', 'type'),
-              values_from = 'avg_temp2', 
+  pivot_wider(
+    id_cols = c('division'),
+    names_from = c('urban', 'type'),
+    values_from = 'avg_temp2', 
   )
+
 col_names = c('Census Division', rep(types, 3))
 urban_levels = with(temps, levels(urban))
 top_header = c(1, 3, 3, 3)
