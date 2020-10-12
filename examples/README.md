@@ -42,6 +42,11 @@ syntax for useful shell programming patterns. Here are short descriptions:
 
  - `tables_ex1.R` illustrates options for organizing tables 
     to emphasize specfic comparisons.
+
+ - `secret_class.R` taken from 13.6.1 in
+    [Advanced R](https://adv-r.hadley.nz/s3.html#s3-inheritance)
+    illustrates how to use `NextMethod()` for efficient dispatch
+    of inherited methods. 
     
 ### data
 
