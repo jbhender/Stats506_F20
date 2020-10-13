@@ -87,8 +87,8 @@ will need the following two files:
 
 ### Part 2 - Construct a table / marginal tests
 
-1. Construct a table with `ohx_status` in columns  and each of the following
-   variables summarized in rows:
+1. Construct a table with `ohx` (complete / missing) in columns and each
+   of the following variables summarized in rows:
    * `under_20`
    * `gender`
    * `college`
