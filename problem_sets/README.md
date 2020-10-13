@@ -22,7 +22,10 @@ the various languages used in the course.  Currently, this contains:
     on the test set (`isolet5.data`)
     for the [isolet data](https://archive.ics.uci.edu/ml/machine-learning-databases/isolet/).
     The predictions are taken from a logistic model fit using ridge
-    regression to the training data (`isolet+1+2+3+4.data`). 
+    regression to the training data (`isolet+1+2+3+4.data`).
+
+ 2. [nhanes_demo](./data/nhanes_demo.csv) demographic information from
+    NHANES as extracted in problem set 1 with the addition of gender (`RIAGENDR`). 
 
 ## Solutions
 
