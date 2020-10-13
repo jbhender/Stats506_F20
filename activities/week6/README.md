@@ -99,3 +99,5 @@ will need the following two files:
 3. Include a column 'p-value' giving a p-value from a chi-squared test comparing
    the 2 x 2 tables for each demographic characteristic and OHX exam status. 
 
+Please push a copy of your script to your `Stats506_public` repository before the end of class.
+
