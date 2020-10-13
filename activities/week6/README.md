@@ -106,3 +106,17 @@ Documentations for the variables included can be found at:
 
 Please push a copy of your script to your `Stats506_public` repository before the end of class.
 
+<html> 
+  <head> 
+    <script src="jquery.js"></script> 
+    <script> 
+    $(function(){
+      $("#includedContent").load("tab1.html"); 
+    });
+    </script> 
+  </head> 
+
+  <body> 
+     <div id="includedContent"></div>
+  </body> 
+</html>
