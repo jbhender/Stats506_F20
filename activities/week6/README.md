@@ -62,6 +62,11 @@ will need the following two files:
  * `nahanes_demo.csv`
  * `nhanes_ohxden.csv`
 
+Documentations for the variables included can be found at:
+
+  * [demo](https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/DEMO_I.htm)
+  * [dentition](https://wwwn.cdc.gov/Nchs/Nhanes/2015-2016/OHXDEN_I.htm).
+
 1. Write an R script to read in both data files.
 
 2. The variable `OHDDESTS` contains the status of the oral health exam.
