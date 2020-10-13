@@ -107,4 +107,3 @@ Documentations for the variables included can be found at:
 Please push a copy of your script to your `Stats506_public` repository before the end of class.
 
 
-<iframe src="tab1.html" seamless></iframe>

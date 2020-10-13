@@ -54,7 +54,7 @@ demo = demo %>%
   mutate(
     college = ifelse(education %in% 4:5, 
                      'College Graduate/Some College', 
-                     'No College/<20'),
+                     'No College/Age <20'),
     gender = c('Male', 'Female')[gender]
   )
 
@@ -85,7 +85,6 @@ tab1 = function(df, g_row = 'under_20', g_col = 'ohx') {
     summarize(n = n(), .groups = 'drop') %>%
     pivot_wider(names_from = all_of(g_col), values_from = 'n') 
   p = chisq.test(as.matrix(tab[, -1]))$p.value
-  
   
   # format an output table
   tab = demo %>%
@@ -121,10 +120,13 @@ for ( var in row_vars ) {
 tab1 = bind_rows(tab_list)
 
 # format as an html table: ----------------------------------------------------
-tab1 %>%
-  select(!var, Group = level) %>%
+tab1_html = tab1 %>%
+  select(!var, Group = level, p = pval) %>%
   knitr::kable(format = 'html') %>%
   kableExtra::kable_styling("striped", full_width = TRUE) %>%
   kableExtra::add_header_above(
     header = c(' ' = 1, 'Dentition Exam' = 2, ' ' = 1)
-  ) 
+  ) %>%
+  kableExtra::group_rows("Age Group", start_row = 1, end_row = 2) %>%
+  kableExtra::group_rows("Gender", start_row = 3, end_row = 4) %>%
+  kableExtra::group_rows("Education", start_row = 5, end_row = 6) 
