@@ -27,6 +27,9 @@ the various languages used in the course.  Currently, this contains:
  2. [nhanes_demo](./data/nhanes_demo.csv) demographic information from
     NHANES as extracted in problem set 1 with the addition of gender (`RIAGENDR`). 
 
+ 3. [nhanes_ohx](./data/nhanes_ohx.csv) oral health examination data from NHANES
+    as constructed in problem set 1.
+    
 ## Solutions
 
  - [ps1](./solutions/ps1/) Solutions to

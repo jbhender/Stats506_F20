@@ -159,7 +159,7 @@ perf_pr = function(yhat, y, plot = c('none', 'base', 'ggplot2')) {
   df[['recall']] = with(df, tp / {tp + fn})
   df[['precision']] = with(df, tp / {tp + fp})
   
-  # area under the ROC curve 
+  # area under the precision-recall curve 
   auc_pr = with(df,
                 .5 * sum(diff(recall) * {precision[-1] + precision[-nrow(df)]})
   )
