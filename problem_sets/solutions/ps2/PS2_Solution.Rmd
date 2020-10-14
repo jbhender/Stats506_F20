@@ -1,0 +1,329 @@
+---
+title: "Problem Set 2 Solution, <br>Stats 506, F20"
+author: "James Henderson, PhD"
+date: "`r format.Date(Sys.Date(), '%B %d, %Y')`"
+output: 
+  html_document:
+    code_folding: hide
+    theme: united
+    highlight: pygments
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## About
+This is an example solution to Problem Set 2 for Stats 506 in Fall 2020. 
+
+To build this document, run 
+`Rscript -e "rmarkdown::render('./PS2_solution.Rmd')"` at the command line or
+`bash ps2_make.sh` to build this document *after* running the scripts which
+prepare the source data.
+
+## Question 1
+
+### Code Organization
+
+The solution to this question is split into four parts:
+
+ - `0-ps1_q1_data.sh` uses the `wget` shell utility to download needed data.
+ - `1-ps1_q1_prep_data.R` cleans and creates minimal data files for analysis.
+    This file creates `ps2_q1.RData` containing 4 tibbles:
+    * `recs09` - cleaned/minimal 2009 data
+    * `recs15` - cleaned/minimal 2015 data
+    * `w09` - replicate weights for the 2009 data
+    * `w15` - replicate weights for the 2015 data.
+ - `2-ps2_q1_analysis.R` - defines a function that can be used to estimate 
+   either means for numeric or logical variables, and proportions for unique
+   levels in factor or character variables. That function is then used to 
+   produce the needed estimates, which are then combined to compute differences.
+ - `PS2_Solution.Rmd` runs `2-ps2_q1_analysis.R` and builds the page you are 
+   reading. Code for figures and tables can be found here.  
+ - `3-ps2_make.sh` runs the first two data preparation scripts and then 
+   builds this document. 
+ 
+### Solution
+
+```{r analysis, message = FALSE}
+source('./2-ps2_q1_analysis.R')
+```
+
+
+#### Number of TVs {.tabset .tabset-fade .tabset-pills}
+
+The figures and table below compare the average number of televisions per 
+household in 2009 and 2015 by Census Division and rurality.  
+
+##### Figures
+
+```{r tv_n_annual_fig, fig.cap = cap1a}
+cap1a = paste(
+  "**Figure 1a.** *Average number of televisions per household.* Estimates use",
+  "the 2009 and 2015 RECS data."
+)
+
+div_order = {
+  tv_n %>%
+   group_by(division) %>%
+   summarize( tv_n = mean(tv_n), .groups = 'drop' ) %>%
+   arrange(desc(tv_n)) 
+}[['division']]
+
+tv_n %>%
+  mutate(
+    division = factor(division, div_order), 
+    `Urban Type` = rurality
+  ) %>%
+  ggplot(
+    aes(x = division, y = tv_n, color = year)) +
+  geom_point( position = position_dodge(.5) ) +
+  geom_errorbar( 
+    aes(ymin = tv_n_lwr, ymax = tv_n_upr),
+    position = position_dodge(.5), width = 0.2 
+  ) + 
+  facet_wrap(~`Urban Type`) + 
+  coord_flip() +
+  theme_bw() +
+  scale_color_manual(values = c('darkblue', 'darkred')) + 
+  ylab('Average # of televisions') + 
+  xlab('')
+```
+
+```{r tv_n_diff, fig.cap = cap1b}
+cap1b = paste(
+  "**Figure 1b.** *Difference in average number of televisions per household",
+  "2015 less 2009.*"
+)
+
+div_order = {
+  tv_n_diff %>%
+   group_by(division) %>%
+   summarize( diff = mean(diff), .groups = 'drop' ) %>%
+   arrange(desc(diff)) 
+}[['division']]
+
+tv_n_diff %>%
+  mutate(
+    division = factor(division, div_order), 
+    `Urban Type` = rurality
+  ) %>%
+  ggplot( aes(x = division, y = diff, color = `Urban Type`) ) +
+  geom_hline(yintercept = 0, lty = 'dashed') + 
+  geom_point( position = position_dodge(.5) ) +
+  geom_errorbar( 
+    aes(ymin = lwr, ymax = upr),
+    position = position_dodge(.5), width = 0.2 
+  ) + 
+  coord_flip() +
+  theme_bw() +
+  scale_color_manual(values = c('darkred', 'darkblue')) + 
+  ylab('Difference in average # of televisions (2015 less 2009)') + 
+  xlab('') 
+```
+
+##### Table
+
+```{r tv_n_table}
+cap_tab1 = paste(
+ "**Table 1.** *Average number of televisions per household 2009 and 2015.*",
+ "Numbers in parantheses represent 95% confidence intervals."
+)
+
+tab1 = tv_n %>%
+  mutate(
+    pretty = sprintf('<div>%4.2f</div> <div>(%4.2f, %4.2f)</div>', 
+                     tv_n, tv_n_lwr, tv_n_upr)
+  ) %>%
+  pivot_wider(
+    id_cols = c('division', 'rurality'),
+    names_from = 'year',
+    values_from = 'pretty'
+  )
+
+tab1 = tab1 %>% 
+  left_join(
+    transmute(tv_n_diff, 
+           division,
+           rurality,
+           Change =  sprintf('<div>%4.2f</div> <div>(%4.2f, %4.2f)</div>',
+                             diff, lwr, upr) 
+    ),
+    by = c('division', 'rurality')
+)
+
+tab1 %>%
+  select(
+    `Census Division` = division, 
+    `Urban Type` = rurality,
+    `2009`,
+    `2015`,
+    Change
+  ) %>%
+  knitr::kable(
+    format = 'html', 
+    escape = FALSE, 
+    align = 'llccc',
+    cap = cap_tab1
+  ) %>%
+  kableExtra::kable_styling("striped", full_width = TRUE)
+```
+
+#### Type of Primary Television {.tabset .tabset-fade .tabset-pills}
+
+##### Figures
+
+```{r tv_type_annual, fig.cap = cap2a}
+cap2a = paste(
+  "**Figure 2a.** *Primary television type.* This figure shows the percent of",
+  "homes with each television type for their most used television. Note the",
+  "increase in the percent of homes with LED TV's and the corresponding",
+  "decrease in standard tube televisions."
+)
+## order divisions
+div_order = {
+  tv_type %>%
+   filter(tv_type == 'Standard Tube' & year == 2009) %>%
+   group_by(division) %>%
+   summarize( p_tube = mean(p), .groups = 'drop' ) %>%
+   arrange(desc(p_tube)) 
+}[['division']]
+
+## order tv_type
+type_order = {
+  tv_type %>%
+   filter(year == 2009) %>%
+   group_by(tv_type) %>%
+   summarize( p = mean(p), .groups = 'drop' ) %>%
+   arrange(desc(p)) 
+}[['tv_type']]
+
+## construct a plot
+tv_type %>%
+  mutate(
+    division = factor(division, div_order), 
+    `Urban Type` = rurality,
+    tv_type = factor(tv_type, type_order)
+  ) %>%
+  ggplot( aes(x = division, y = p, shape = year, color = `Urban Type`) ) +
+  geom_point( position = position_dodge(.5) ) +
+  geom_point( position = position_dodge(.5) ) +
+  geom_errorbar( 
+    aes(ymin = p_lwr, ymax = p_upr),
+    position = position_dodge(.5), width = 0.2
+  ) + 
+  facet_wrap(~ tv_type) + 
+  coord_flip() +
+  theme_bw() +
+  scale_color_manual( values = c('darkorange', 'black') ) + 
+  ylab('% of primary televisions') + 
+  xlab('') +
+  ylim(c(0, 75))
+```
+
+```{r tv_type_diff, fig.cap = cap2b}
+cap2b = paste(
+  "**Figure 2b.** *Changes in primary television type, 2015 less 2009.*"
+)
+
+tv_type_diff %>%
+  mutate(
+    division = factor(division, div_order), 
+    `Urban Type` = rurality,
+    tv_type = factor(tv_type, type_order)
+  ) %>%
+  ggplot( aes(x = division, y = d, color = `Urban Type`) ) +
+  geom_hline( yintercept = 0, lty = 'dashed', color = 'darkgrey' )  + 
+  geom_point( position = position_dodge(.5) ) +
+  geom_point( position = position_dodge(.5) ) +
+  geom_errorbar( 
+    aes(ymin = d_lwr, ymax = d_upr),
+    position = position_dodge(.5), width = 0.2
+  ) + 
+  facet_wrap(~ tv_type) + 
+  coord_flip() +
+  theme_bw() +
+  scale_color_manual( values = c('darkorange', 'black') ) + 
+  ylab('change in % of primary televisions, 2015 less 2009') + 
+  xlab('') 
+```
+
+##### Table
+
+```{r tv_type_table}
+cap_tab2 = paste(
+ "**Table 2.** *Primary TV types in US households (%) in 2009 and 2015.*",
+ "Numbers in parantheses are 95% confidence intervals."
+)
+
+tv_type = tv_type %>%
+  mutate(
+    pretty = sprintf('%4.1f<br>(%4.1f, %4.1f)', 
+                     p, p_lwr, p_upr),
+    tv_type = factor(tv_type, rev(type_order))
+  )
+
+## 2009/2015 by rurality
+tab2_urb = tv_type %>%
+  filter(rurality == 'Urban') %>%
+  pivot_wider(
+    id_cols = c('division', 'tv_type'),
+    names_from = 'year',
+    names_prefix = 'urban_',
+    values_from = 'pretty',
+    values_fill = '--'
+  )
+tab2_rul = tv_type %>%
+  filter(rurality == 'Rural') %>%
+  pivot_wider(
+    id_cols = c('division', 'tv_type'),
+    names_from = 'year',
+    names_prefix =  'rural_',
+    values_from = 'pretty',
+    values_fill = '--'
+  )
+tab2 = left_join(tab2_urb, tab2_rul, by = c('division', 'tv_type'))
+
+## changes
+tab2_diff = tv_type_diff %>%
+    transmute(
+      division,
+      rurality,
+      tv_type = factor(tv_type, rev(type_order)),
+      Change =  sprintf('%4.1f<br>(%4.1f, %4.1f)',
+                        d, d_lwr, d_upr) 
+    ) %>%
+  pivot_wider(
+    id_cols = c('division', 'tv_type'),
+    names_from = 'rurality', 
+    values_from = 'Change',
+    values_fill = '--'
+  )
+tab2 = left_join(tab2, tab2_diff, by = c('division', 'tv_type') )
+
+cn = c('Census Division', 'TV Type', 
+       '2009', '2015', 'Change',
+       '2009', '2015', 'Change'
+       )
+tab2 %>%
+  select(
+    division, 
+    tv_type, 
+    urban_2009, 
+    urban_2015, 
+    Urban,
+    rural_2009,
+    rural_2015,
+    Rural
+  ) %>%
+  arrange(division, desc(tv_type)) %>%
+  knitr::kable(
+    format = 'html', 
+    escape = FALSE, 
+    align = 'llcccccc',
+    col.names = cn,
+    cap = cap_tab2
+  ) %>%
+  kableExtra::kable_styling("striped", full_width = TRUE) %>%
+  kableExtra::add_header_above(header = c(' ' = 2, 'Urban' = 3, 'Rural' = 3))
+```
