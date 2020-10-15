@@ -48,7 +48,7 @@ key demographics. This helps an interested reader reason about possible selectio
 bias stemming from those for whom the outcome is observed being different in some
 ways from those for whom it is not.
 
-In this activity, we will construct a balance table comparing demogrpahics for those
+In this activity, we will construct a balance table comparing demogarphics for those
 who are or are not missing the oral health examination in the NHANES data.
 
 Use R and the tidyverse for this activity. 
@@ -70,7 +70,7 @@ Documentations for the variables included can be found at:
 1. Write an R script to read in both data files.
 
 2. The variable `OHDDESTS` contains the status of the oral health exam.
-   Merge this variable into the demograhics data.
+   Merge this variable into the demographics data.
 
 3. Create a clean dataset with the following variables:
   * `id` (from `SEQN`)
@@ -88,7 +88,7 @@ Documentations for the variables included can be found at:
    "missing" when `ohx_status` is missing or corresponds to "partial/incomplete."
 
 5. Remove rows from individuals with `exam_status != 2` as this form of
-   missingness is already acounted for in the survey weights.
+   missingness is already accounted for in the survey weights.
 
 ### Part 2 - Construct a table / marginal tests
 
