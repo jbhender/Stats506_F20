@@ -34,9 +34,9 @@ libname mylib './data';
 
 /* import fixed width data using column format: ---------------------------- */
 data mylib.stations;
- infile './data/ghcnd-stations.txt' dsd;
+ infile './data/ghcnd-stations.txt';
  input station $ 1-11 lat 13-20 lon 22-30 elev 32-37 state $ 39-40
-       name $ 42-71 gsn $ 73-75 hcn 77-79 wmo 81-85;
+       name $ 42-71 gsn $ 73-75 hcn $ 77-79 wmo $ 81-85;
 run; 
 
 /* 79: --------------------------------------------------------------------- */
