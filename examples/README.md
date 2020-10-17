@@ -63,7 +63,7 @@ syntax for useful shell programming patterns. Here are short descriptions:
    * `libname` statements for creating library handles
    * `infile` statements for fixed width data
 
- - [example2](./sas/example2.sas) provides another demonsration of
+ - [example2](./sas/example2.sas) provides another demonstration of
    using `libname` and a two-part file name to save `sas7bdat` binaries
    to disk.
 
