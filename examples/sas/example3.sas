@@ -14,7 +14,7 @@
 /* 79: --------------------------------------------------------------------- */
 
 /* data library for reading/writing data: ---------------------------------- */
-libname mylib '~/github/Stats506_F20/examples/sas/';
+libname mylib '~/github/Stats506_F20/examples/sas/data/';
 
 /* Create a data set recs referring to existing file: ---------------------- */
 data recs; /* Question: what library is this in? */
