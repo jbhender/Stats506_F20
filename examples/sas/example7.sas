@@ -19,7 +19,7 @@
 /* 79: --------------------------------------------------------------------- */
 
 /* data library for reading/writing data: ---------------------------------- */
-libname mylib '~/github/Stats506_F19/examples/sas/data/';
+libname mylib '~/github/Stats506_F20/examples/sas/data/';
 
 /* create a short name for recs data: -------------------------------------- */
 data recs;
