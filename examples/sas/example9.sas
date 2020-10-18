@@ -1,4 +1,6 @@
 /* ------------------------------------------------------------------------- *
+ * SAS Example for Stats 506, Fall 2020
+ *  
  * Compute the percent of wood shingled roofs by state 
  *  using PROC SQL and the 2009 RECS data.
  *
@@ -12,10 +14,11 @@
 libname mylib '~/github/Stats506_F19/examples/sas/data/';
 
 /* tell sas where to find formats: ----------------------------------------- */ 
+/* see example 7 for creaton of this library */
 options fmtsearch=( mylib.recs_formats work ); 
 run;
 
-/* use proc sql to find % wood shingle roof by "State": -------------------- */
+/* use proc sql to find % of wood shingle roofs by "State": ---------------- */
 proc sql;
 
   /* Count total homes by state */

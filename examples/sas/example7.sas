@@ -74,7 +74,7 @@ proc print data=totals;
 title "Output table 'totals' from proc summary using a 'class' statement.";
 
 /* alternately use a by statement: ----------------------------------------- */
-proc sort data=recs; 
+ proc sort data=recs; 
  by reportable_domain;
 
 proc summary data=recs;
