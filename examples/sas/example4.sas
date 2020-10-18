@@ -3,7 +3,8 @@
  *
  * This file imports RECS data from:
  *   ./data/recs2009_public.csv
- *   http://www.eia.gov/consumption/residential/data/2009/index.cfm?view=microdata
+ *   http://www.eia.gov/consumption/residential/data/2009/
+ *     index.cfm?view=microdata
  *
  * Then creates urban and rural subsets and writes as sas7bdat.
  *
