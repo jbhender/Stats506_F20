@@ -11,7 +11,7 @@
 /* 79: --------------------------------------------------------------------- */
 
 /* data library: ----------------------------------------------------------- */ 
-libname mylib '~/github/Stats506_F19/examples/sas/data/';
+libname mylib '~/github/Stats506_F20/examples/sas/data/';
 
 /* tell sas where to find formats: ----------------------------------------- */ 
 /* see example 7 for creaton of this library */
@@ -48,7 +48,7 @@ proc sql;
 run;
 
 /* print the result: ------------------------------------------------------- */
-proc print data=wood_roof_pct;
+proc print data=wood_roof_pct noobs;
   var state percent_wood;
   format percent_wood 4.1
          state state.;
