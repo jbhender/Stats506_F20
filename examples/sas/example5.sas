@@ -1,14 +1,16 @@
 /* ------------------------------------------------------------------------- *
  * An example SAS program for Stats 506.
  *
- * This file imports RECS data from:
- *   ./data/recs2009_public.csv
- *   http://www.eia.gov/consumption/residential/data/2009/index.cfm?view=microdata
+ * This file uses RECS data from:
+ *   recs2009_public_v4.sas7bdat
+ * 
+ *   http://www.eia.gov/consumption/residential/data/2009/index.cfm
+ *     ?view=microdata
  *
  * Then demonstrates proc tabulate for descriptive statistics.
  * 
  * Author: James Henderson
- * Updated: Oct 17, 2019
+ * Updated: Oct 19, 2020
  * ------------------------------------------------------------------------- *
 */
 /* 79: --------------------------------------------------------------------- */
@@ -33,11 +35,11 @@ proc tabulate data=recs;
  var regionc;
  table regionc*N regionc*max regionc*min;
 
-/* get # of urban or rural obs by regionc */
+/* var vs class */
 proc tabulate data=recs;
  var urban;
  class ur;
- table urban*sum ur*N;
+ table urban*sum ur*N urban*N;
 
 /* grouped tables */
 proc tabulate data=recs;

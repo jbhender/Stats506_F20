@@ -14,7 +14,7 @@
  *   
  *
  * Author: James Henderson
- * Upated: Oct 18, 2020
+ * Upated: Oct 19, 2020
  * ------------------------------------------------------------------------- *
  */
 /* 79: --------------------------------------------------------------------- */
@@ -35,7 +35,7 @@ proc sort data=recs1 out=recs2;
  by regionc;
 run;
 
-proc summary;
+proc summary data=recs2;
  class regionc;
  output out=meanstats1
   mean(kwh) = mean_kwh
@@ -58,7 +58,7 @@ data recs4;
 run;
 
 /* Number of homes above the threshold: ------------------------------------ */
-proc summary;           /* Question: What data set is implicitly used ? */
+proc summary;     /* Question: What data set is implicitly used ? */
     class regionc;
     output out=high_kwh;
 
@@ -67,7 +67,7 @@ proc sort data=high_kwh out=high_kwh2;
 run;
 
 /* Print to see result: ----------------------------------------------------- */
-title "high_kwh2"; 
+title "T1: high_kwh2"; 
 proc print data=high_kwh2; 
 
 /* Compute the total number of homes within each region:  ------------------- */
@@ -75,7 +75,7 @@ proc summary data=recs3;
  class regionc;
  output out=all_kwh;   /*Question: Why don't we need an aggregation statement?*/
 
-title "all_kwh"; 
+title "T2: all_kwh"; 
 proc print data=all_kwh;
 run;
 
@@ -85,7 +85,7 @@ data all_kwh2;
   N = _FREQ_;
   keep regionc N;
 
-title "all_kwh2"; 
+title "T3: all_kwh2"; 
 proc print data=all_kwh2; 
 run;
 
@@ -93,13 +93,14 @@ run;
 proc sort data=all_kwh2 out=all_kwh3;
   by regionc;
 
-title "all_kwh3"; 
+title "T4: all_kwh3"; 
 proc print data=all_kwh3;
 run;
   
 /* Merge total homes with number above threshold: ---------------------------- */
-title "The % of single family homes with heating degree days more than one sd
-        above the mean."; 
+title "T5: Percentage of single-family homes with electricity usage
+ more than one sd above the mean."; 
+
 data pct_tab;
  merge all_kwh3 high_kwh2;
  by regionc;
