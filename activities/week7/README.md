@@ -66,11 +66,11 @@ Here is a short list of concepts.
 4. Use `across()` for working with multiple variables.
 
 You can see an example in my solution to last week's activity and a larger example in
-my solution to problem set 1.
+my solution to problem set 2.
 
  * [nhanes_balance.R](../week6/nhanes_balance.R)
 
- * [ps1_q2.R](../../problem_sets/solutions/ps1/ps1_q2.R)
+ * [2-ps2_q1_analysis.R](../../problem_sets/solutions/ps2/2-ps2_q1_analysis.R)
 
 ### Part 1
 
