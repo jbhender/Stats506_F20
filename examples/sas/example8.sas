@@ -18,11 +18,13 @@ libname mydata './data';
 proc sql;
 
     create table recs as
-        select doeid, reportable_domain, mean(hdd65) as mean_hdd65, cufeetng
+        select doeid, reportable_domain, hdd65, 
+               mean(hdd65) as mean_hdd65, cufeetng
         from mydata.recs2009_public_v4
         where typehuq = 2
         group by reportable_domain
-        having mean(hdd65) ge 2000;
+        having hdd65 ge 2000
+        order by reportable_domain, hdd65;
 
 quit;
 

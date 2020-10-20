@@ -60,7 +60,7 @@ data recs;
 run;
 
 /* Propotion of homes above the threshold: ---------------------------------- */
-proc summary;  
+proc summary data=recs;  
     by regionc;
     output out=high_kwh
       sum(w) = p_high_kwh;

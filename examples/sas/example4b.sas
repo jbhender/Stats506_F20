@@ -29,9 +29,8 @@ run;
 /* Create and write an urban subset: --------------------------------------- */
 data urban;
  set mylib.recs2009_public_v4;
-  /*if ur='R' then delete;*/
-  where ur='U'; 
-  
+  if ur='R' then delete;
+ 
 data mylib.recs_urban;
  set urban;
 run;
@@ -50,5 +49,33 @@ data csvlast5;
 
 proc print data=csvlast5;
  var DOEID; 
+
+/* Diagnose the difference: ------------------------------------------------ */
+proc contents data=mylib.recs2009; 
+proc contents data=mylib.recs2009_public_v4;
+run;
+
+
+data mylib.recs2009;
+ set mylib.recs2009;
+ if DOEID = . then delete;
+run;
+
+
+data csvlast5;
+ set mylib.recs2009 nobs=obscount;
+ if _n_ gt (obscount - 5);
+run;
+
+
+proc print data=csvlast5;
+ var DOEID;
+ title "csvlast5 round 2";
+
+run;
+
+proc contents data=mylib.recs2009;
+run;
+
 
 /* 79: --------------------------------------------------------------------- */
