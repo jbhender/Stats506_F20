@@ -40,12 +40,12 @@ https://github.com/jbender/Stats506_F20/tree/master/activities/week7/
 
 One of the nice things about `dplyr` is its use of *tidy evaluation* which
 enables us to write variable (column) names within `dplyr` verbs without
-quotations. However, what is a feature for interactive use make programming with
-`dplyr`, e.g. writing functions that use `dplyr` internally,  more challenging than it
+quotations. However, what is a feature for interactive use makes programming with
+`dplyr`, e.g. writing functions that use `dplyr` internally, more challenging than it
 is when working with functions which use standard evaluation. 
 
 In this activity, you will learn about programming with `dplyr` by writing and generalizing a
-function that use `dplyr` internally. 
+function that uses `dplyr` internally. 
 
 Throughout, it will be helpful to refer to this page:
 
@@ -58,8 +58,8 @@ Here is a short list of concepts.
 1. Function arguments that refer to variables in a data frame (or tibble)
    are best passed as character vectors.
 2. For `dplyr` functions that use *data masking*,
-   + use the embracment operator `{{ }}` to defuse an argument
-   + use the `.data` pronoun to refer to columns using `.data$x` or `.data[[var]]`.
+   + use the embracement operator `{{ var }}` to defuse the argument `var`,
+   + use the `.data` pronoun to refer to columns using `.data$x` or `.data[[var]]`,
    + use the "bang-bang" operator `!!` to force early evaluation.
 3. For functions that use `tidy-select` Use existing methods for selecting with
    a character vector, e.g. `all_of()`.
