@@ -72,7 +72,8 @@ temps_by_region0 =
   summarize( 
     avg_temp_home = sum(temp_home * weight) / sum(weight),
     avg_temp_gone = sum(temp_gone * weight) / sum(weight),
-    avg_temp_night = sum(temp_night * weight) / sum(weight)
+    avg_temp_night = sum(temp_night * weight) / sum(weight),
+    .groups = 'drop'
   )
 
 ## task 1 - replace the repetition above using `across()`
