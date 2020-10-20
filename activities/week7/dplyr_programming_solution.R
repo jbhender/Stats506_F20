@@ -41,7 +41,7 @@ recs_core =
     weight = NWEIGHT,
     
     # grouping factor
-    region = factor(REGIONC, c('Northeast', 'Midwest', 'South', 'West')),
+    region = factor(REGIONC, 1:4, c('Northeast', 'Midwest', 'South', 'West')),
     
     # case selection
     heat_home = factor(HEATHOME, 0:1, c('No', 'Yes') ),
@@ -77,11 +77,15 @@ temps_by_region0 =
   )
 
 ## task 1 - replace the repetition above using `across()`
-#temps_by_region1 = recs_core %>% 
-#  group_by(region) %>%
-#  summarize(
-#    <task 1>
-#  )
+temps_by_region1 = recs_core %>% 
+  group_by(region) %>%
+  summarize(
+    across(
+      .cols = all_of(c('temp_home', 'temp_gone', 'temp_night')),
+      .fns = ~ sum(.x * weight) / sum(weight)
+      ),
+    .groups = 'drop'
+  )
 
 ## task 2 - write a function using the pattern above
 recs_mean0 = function(df, vars) {
@@ -90,33 +94,48 @@ recs_mean0 = function(df, vars) {
   #      df must have a variable 'weight' for the weighted sums. 
   #  vars: a character vector of numeric variables in df
   #
-  # Outputs: a tibble with one row (per group) as returned by summarize / across
+  # Outputs: a tibble with one row (per group) as returned by summarize
 
-  # <task2>
+  summarize(df, 
+    across(
+      .cols = all_of(vars),
+      .fns = ~ sum(.x * weight) / sum(weight)
+    ),
+    .groups = 'drop'
+  )
 }
 
 
 # Don't be afraid to do some of the work outside the function
-#temps_by_region = recs_core %>% 
-#  group_by(region) %>%
-#  recs_mean0( vars = c('temp_home', 'temp_gone', 'temp_night') )
+temps_by_region = recs_core %>% 
+  group_by(region) %>%
+  recs_mean0( vars = c('temp_home', 'temp_gone', 'temp_night') )
 
 ## task 3: write a function `add_groups()` to group a data frame
-add_groups = function(df, group = NULL) {
+add_groups = function(df, groups = NULL) {
   # adds grouping variables to a data.frame and/or tibble
   # Inputs:
   #   df - an object inheriting from the data.frame class, commonly a tibble
-  #   group - (optional, defaults to NULL) a character vector of column
+  #   groups - (optional, defaults to NULL) a character vector of column
   #    names in df to form groups by.
 
+  
   # <task 3> 
+  if ( !is.null(groups) ) {
+    stopifnot(is.character(groups))
+    stopifnot( all(groups %in% names(df)))
+    for ( g in groups ) {
+      df = group_by(df, .data[[g]], .add = TRUE)
+    }
+  }
   
   df
 }
-
+#add_groups(recs_core, 'region')
+#groups( add_groups(group_by(recs, REGIONC), 'UATYP10') )
 
 ## task 4: write a functional version with groups
-recs_mean1 = function(df, vars, group = NULL) {
+recs_mean1 = function(df, vars, groups = NULL) {
   # Inputs
   #  df: a (possibly grouped) tibble or data.frame object to be summarized
   #      df must have a variable 'weight' for the weighted sums. 
@@ -127,10 +146,16 @@ recs_mean1 = function(df, vars, group = NULL) {
   # Outputs: a tibble with one row (per group) as returned by summarize_at
   
   # call `add_groups()`
-  #<task 4a>
-  
+  df = add_groups(df, groups)
   # copy your summarize code from task 2 / `recs_mean0()`
-  #<task 4b>
+
+  summarize(df, 
+            across(
+              .cols = all_of(vars),
+              .fns = ~ sum(.x * weight) / sum(weight)
+            ),
+            .groups = 'drop'
+  )
   
 }
 
