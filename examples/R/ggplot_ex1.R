@@ -31,7 +31,7 @@ div_order =
       group_by( division ) %>%
       summarize( est = mean(est), .groups = 'drop' ) %>%
       arrange(est),
-    as.character( division) 
+    as.character(division) 
   )
 
 # plot 1: ---------------------------------------------------------------------
@@ -123,8 +123,8 @@ temps_plot4 =
   ggplot( 
     aes(y = est, 
         x = division, 
-        color = `Urban Type`,
-        shape = `Temperature Type`
+        shape = `Temperature Type`,
+        color = `Urban Type`
     ) 
   ) +
   geom_errorbar( 

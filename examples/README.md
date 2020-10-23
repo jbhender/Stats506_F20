@@ -34,6 +34,11 @@ syntax for useful shell programming patterns. Here are short descriptions:
  - `ex_macros.do` - creating and acessing local macros; evaluate
     vs unevaluated macros.
 
+ - `ex_mata.do` - using Stata's "mata" language to work with
+    matrices created by estimation commands.
+
+ - `ex_frames.do` - using `frames` to work with multiple in-memory
+    data sets. 
 
 ### R
 
