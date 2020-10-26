@@ -2,7 +2,7 @@
 * Stats 506, Fall 2020 
 * Problem Set X, Question X
 * 
-* Descirbe your script here
+* Describe your script here
 * 
 *
 * Author: 
@@ -13,7 +13,7 @@
 // set up: ------------------------------------------------------------------ *
 *cd ~/path/to/your/files // comment out before submission 
 *version
-log using psX_tempate.log, text replace
+log using psX_template.log, text replace
 
 // data prep: --------------------------------------------------------------- *
 
