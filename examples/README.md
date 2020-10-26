@@ -81,7 +81,32 @@ syntax for useful shell programming patterns. Here are short descriptions:
 
  - [example5](./sas/example5.sas) `proc tabulate` examples.
  
- 
+ - [example6](./sas/example6.sas) descriptive statistics using:
+   * `proc means`
+   * `proc freq`
+   * `proc summary`. 
+   
+ - [example7](./sas/example7.sas)
+   * (simple) data step programming
+   * `proc format` to create a new variable format
+   * how to save and link to formats in a sas format library
+   * use of `proc summary` for `group_by() %>% summarize()` style computations.
+
+ - [example8](./sas/example8.sas) Simple `proc sql` example. 
+
+ - [example9](./sas/example9.sas) Computes the percent of wood shingled roofs by state 
+   using `proc sql` and the 2009 RECS data.
+
+ - [example10](./sas/example10.sas) Uses RECS 2009 to compute the percent of homes
+   more than one sd above the national average number of heating degree days and
+   illustrates the following data step programming concepts:
+   * merging tables using a data step
+   * the 're-merging' technique in which we compute summary statistics,
+     then 're-merge' these into the original table, much like a
+     (`dplyr`) `group_by() %>% mutate()` in R.   
+
+ - [example11](./sas/example11.sas) Repeats example 10 using `proc sql`. It
+   is recommended you try this as an exercise prior to reviewing this script. 
    
 ### data
 
