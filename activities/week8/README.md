@@ -32,7 +32,7 @@ only *after* everyone in the group has completed the step.
 **Questioner** - The person in the questioner role should be prepared to ask the
 group's questions when the class reconvenes as a whole. 
 
-## Week 8 - Programming with dplyr
+## Week 8 - Group Project Proposal
 
 The direct link to this page is:
 https://github.com/jbender/Stats506_F20/tree/master/activities/week8/
