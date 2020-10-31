@@ -1,0 +1,375 @@
+---
+title: "Problem Set 3 Solution, <br>Stats 506, F20"
+author: "James Henderson, PhD"
+date: "`r format.Date(Sys.Date(), '%B %d, %Y')`"
+output: 
+  html_document:
+    code_folding: hide
+    theme: united
+    highlight: pygments
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries}
+suppressPackageStartupMessages({
+  library(tidyverse)
+})
+```
+
+## About
+This is an example solution to Problem Set 3 for Stats 506 in Fall 2020. 
+
+To build this document, run 
+`Rscript -e "rmarkdown::render('./PS3_solution.Rmd')"` at the command line or
+`bash ps3_make.sh` to build this document *after* running the scripts which
+prepare the source data.
+
+## Data preparation
+
+The script `ps3_prep_data.do` merges the demographic and dentition data and
+creates input data sets `demo_ps3.dta` and `ohxden_ps3.dta` used by the 
+solutions that follow.  
+
+<details>
+ <summary> `ps3_prep_data.do` </summary>
+```{r ps3_prep_data.do, comment = "", results = "asis"}
+writeLines(c('```stata', readLines("./ps3_prep_data.do"), '```'))
+```
+</details>
+
+<details>
+ <summary> `ps3_prep_data.log` </summary>
+```{r ps3_prep_data.log, comment = "", results = "asis"}
+writeLines(c('```', readLines("./ps3_prep_data.log"), '```'))
+```
+</details>
+
+## Question 1
+
+In this question, we construct a balance table for missing or incomplete 
+dentition exams using the 4 cohort NHANES data from the previous assignment.
+
+The primary work for this question is done in `ps3_q1.do`. Click below to see
+its contents or log. 
+<details>
+ <summary> `ps3_q1.do` </summary>
+```{r ps3_q1.do, comment = "", results = "asis"}
+writeLines(c('```stata', readLines("./ps3_q1.do"), '```'))
+```
+</details>
+
+<details>
+ <summary> `ps3_q1.log` </summary>
+```{r ps3_q1.log, comment = "", results = "asis"}
+writeLines(c('```', readLines("./ps3_q1.log"), '```'))
+```
+</details>
+
+The script outputs csv files named according to the pattern 
+`balance_table_*.csv`. These are assembled for presentation using R below.
+
+```{r q1_balance_prep}
+## formatting functions
+pretty_p = function(p, min = 1e-3, fmt = '%5.3f') {
+  out = ifelse(p < min, sprintf('p < %s', fmt), sprintf('p = %s', fmt))
+  ifelse(p < min, sprintf(out, min), sprintf(out, p))
+}
+pwc = function(n) {
+  format(n, big.mark = ',')
+}
+
+## read in balance tables
+files = grep("^balance_table", dir(), value = TRUE)
+tab_list = lapply(files, read.csv)
+names(tab_list) = 
+  str_replace_all(files, '.csv', '') %>% str_replace_all('balance_table_', '')
+
+
+## format categorical variable tab
+tab1 = bind_rows(
+  mutate(tab_list[['1']], u20 = 1),
+  mutate(tab_list[['0']], u20 = 0) 
+)
+
+## categorical variables
+tab = tab1 %>%
+  transmute(
+    variable = variable,
+    Subgroup = level, 
+    `Complete` = sprintf('%s (%4.1f%%)', pwc(n_obs), pct_obs),
+    `Incomplete/Missing` = sprintf('%s (%4.1f%%)', pwc(n_miss), pct_miss),
+    p = ifelse(is.na(p), '--', pretty_p(p)),
+    u20
+  )
+
+## format age tab
+tab2 = tab_list[["age"]] %>%
+  transmute(
+    under_20,
+    ohx = ifelse(ohx == 1, 'Complete', 'Incomplete/Missing'),
+    disp = sprintf('%4.1f (%i, %i)', mean, lwr, upr),
+    p = pretty_p(p)
+  ) 
+
+tab_age = tab2 %>%
+  select(!"p") %>%
+  pivot_wider(id_cols = 'under_20', 
+              names_from = 'ohx',
+              values_from = disp
+            ) %>%
+  left_join(
+    {filter(tab2, !is.na(p)) %>% select(under_20, p)}, 
+    by = 'under_20'
+  ) %>%
+  mutate(
+    variable = 'all_age', # named so after all in table
+    Subgroup = 'Age, mean (IQR)',
+    u20 = under_20
+  ) %>%
+  select(variable, Subgroup, !"under_20")
+
+## append as a single table and arrange for presentation
+tab = bind_rows(tab, tab_age) %>%
+  arrange(-u20, variable)
+```
+
+Here is the balance table.
+
+```{r q1_balance}
+cap1 = paste(
+  "**Table 1.** *Association of select demographics with having a complete",
+  "dention exam.* Only those who participated in the medical examination are",
+  "included. "
+)
+
+tab_html = tab %>%
+  select(!c("variable", "u20")) %>%
+  knitr::kable(format = 'html', caption = cap1, align = 'r') %>%
+  kableExtra::kable_styling("striped", full_width = TRUE)
+
+## add grouping to rows
+
+### individual vars
+n_vars = tab %>%
+    group_by(u20, variable) %>%
+    summarize(n = n(), .groups = 'drop') %>%
+    arrange(-u20)
+n_cum = cumsum(n_vars$n)
+grps = which(n_vars$n > 1)
+
+for ( g in grps ) {
+  label = sprintf('%s, n (%%)', str_to_title(n_vars$variable[g]))
+  tab_html = tab_html %>%
+    kableExtra::group_rows(label, n_cum[g - 1] + 1, n_cum[g])
+}
+### under 20
+n_u20 = as.vector(with(tab, table(u20)))
+tab_html = tab_html %>%
+  kableExtra::group_rows("Age < 20 years", 1, n_u20[2]) %>%
+  kableExtra::group_rows("Age $\\ge$  20 years", n_u20[2] + 1,  sum(n_u20))
+
+tab_html
+```
+
+## Question 2
+
+In this question, we use logistic regression to model the probability of a 
+complete dentition exam as a function of the demographic variables.
+
+The primary work for this question is done in `ps3_q2.do`. Click below to see
+its contents or log. 
+<details>
+ <summary> `ps3_q2.do` </summary>
+```{r ps3_q2.do, comment = "", results = "asis"}
+writeLines(c('```stata', readLines("./ps3_q2.do"), '```'))
+```
+</details>
+
+<details>
+ <summary> `ps3_q2.log` </summary>
+```{r ps3_q2.log, comment = "", results = "asis"}
+writeLines(c('```', readLines("./ps3_q2.log"), '```'))
+```
+</details>
+
+These scripts outputs the summary file `ps3_q2.xlsx` with tabs:
+  * AIC - the models considered and their AIC's,
+  * Top Model - regression output for the top model,
+  * Top Model etable - alternative regression output. 
+  
+The final table is included here primarily as a demonstration. 
+
+In the regression models, please note the following:
+ - as *Table 1* suggests, there are no dentition exams for those under age 1;
+   these participants have been excluded as they are missing structurally. 
+ - to make the corresponding odds ratios easier to interpret, age has been
+   centered and scaled to 10-year units. 
+
+The code below reads and formats these results for display.  
+```{r ps2_q2_format}
+## AIC
+aic_tab = readxl::read_xlsx('./ps3_q2.xlsx', sheet = 'AIC')
+aic_tab = aic_tab %>%
+  rename( `Stata Command` = model ) %>%
+  mutate( model = paste0('m', 1:n()), delta = AIC - min(AIC)) %>%
+  select(model, everything())
+
+## regression table
+term_map = c(
+  "1.under_20" = "Under 20", 
+  "2.gender" = "Female",
+  "age_c" = "Age in decades, (centered)",
+  "c.age_c#c.age_c" = "Age squared",
+  "1.college" = "Some college or College graduate",
+  "1.college#c.age_c" = "Age x College",
+  "_cons" = "Reference Probability (Age 32/Male/No college)"
+)
+reg_tab = readxl::read_xlsx('./ps3_q2.xlsx', sheet = 'Top Model')
+reg_tab = reg_tab %>%
+  filter( !{grepl('b[.]', Term) | grepl('^o[.]', Term)}) %>%
+  transmute(
+    Covariate = term_map[Term],
+    `OR (95% CI)` = 
+      ifelse(Term == '_cons', 
+       sprintf('%4.2f (%4.2f, %4.2f)', plogis(est), plogis(lwr), plogis(upr)),
+       sprintf('%4.2f (%4.2f, %4.2f)', exp(est), exp(lwr), exp(upr))
+      )
+  )
+
+```
+
+```{r q2_regtab}
+cap2 = paste(
+  "**Table 2.** *Odds Ratios for a Complete Dentition Exam.*",
+  "Overall the probability of a complete dentition exam is high. Those",
+  "under 20, males, and college attendance were associated with higher",
+  "probablity of a complete exam. Increasing age is associated with a lower",
+  "probability of a complete exam for those under ~60 (see marginal effects",
+  "in the log, not included here.)"
+)
+knitr::kable(reg_tab, caption = cap2) %>%
+  kableExtra::kable_styling("striped")
+```
+
+```{r q3_aictab}
+cap3 = paste(
+  "**Table 3.** *AIC values for each logistic regression models considered.*",
+  "Model 2 has the smallest AIC, but model 1 is likley preferred for",
+  "simplicity as the improvement in model fit is small."
+)
+knitr::kable(aic_tab, caption = cap3) %>%
+  kableExtra::kable_styling("striped")
+```
+
+## Question 3
+
+In the final question, we create a visualization for a descriptive 
+investigation of how tooth status is associated with age. 
+
+The results to be plotted are in `ps3_q3_results.csv` and are produced by
+`ps3_q3.do`.  You can view this script or its log below.
+
+<details>
+ <summary> `ps3_q3.do` </summary>
+```{r ps3_q3.do, comment = "", results = "asis"}
+writeLines(c('```stata', readLines("./ps3_q3.do"), '```'))
+```
+</details>
+
+<details>
+ <summary> `ps3_q3.log` </summary>
+```{r ps3_q3.log, comment = "", results = "asis"}
+writeLines(c('```', readLines("./ps3_q3.log"), '```'))
+```
+</details>
+
+The results are read in using the code below.
+
+```{r q3_reulsts, message = FALSE}
+q3 = read_delim("ps3_q3_results.csv", delim = ',')
+
+types = c(
+  paste(c('3rd', '2nd', '1st'), 'molar'),
+  paste(c('2nd', '1st'), 'bicuspid'),
+  'cuspid',
+  'lateral incisor',
+  'central incisor'
+)
+types_all = c(types, rev(types), types, rev(types))
+rl = c(rep('right', 8), rep('left', 16), rep('right', 8))
+
+q3_clean = q3 %>%
+  mutate(
+    age = str_replace_all(
+      str_split(age_grp, '-', 2, simplify = TRUE)[, 2], '\\)', ''),
+    age = as.numeric(age),
+    tooth_num = as.numeric(str_sub(tooth, 1, 2)),
+    type = types_all[tooth_num],
+    right_left = rl[tooth_num],
+    upr_lwr = ifelse(tooth_num > 16, 'upper', 'lower'),
+    tooth_name = paste(upr_lwr, right_left, type),
+    Status = ohx_tc
+  ) 
+  
+```
+
+
+Figures 1a-c presents a visualization of this analysis, split up by tooth type.
+
+### Figure 1 {.tabset .tabset-fade .tabset-pills}
+
+#### Molars
+```{r q3_figa, fig.cap = cap1a}
+cap_template = paste(
+  "**Figure %s.** *Tooth status as a function of age for %s.*",
+  "Lines represents a linear interpolation of 6-year age buckets with the",
+  "shaded areas providing (pointwise) 95%% confidence intervals."
+)
+cap1a = sprintf(cap_template, "1a", "molars")
+q3_clean %>%
+  filter(grepl('molar', tooth_name)) %>%
+  ggplot(aes(x = age, y = p, group = Status, color = Status) )  +
+  geom_ribbon(
+    aes(ymin = lwr, ymax = upr, fill = Status, color = NULL),
+    alpha = 0.5
+  ) + 
+  geom_line() +
+  facet_wrap(~tooth_name, nrow = 4) +
+  theme_bw() +
+  ylab('proportion of teeth')
+```
+
+#### Cuspids
+```{r q3_figb, fig.cap = cap1b}
+cap1b = sprintf(cap_template, "1b", "cuspids and bicuspids")
+q3_clean %>%
+  filter(grepl('cuspid', tooth_name)) %>%
+  ggplot(aes(x = age, y = p, group = Status, color = Status) )  +
+  geom_ribbon(
+    aes(ymin = lwr, ymax = upr, fill = Status, color = NULL),
+    alpha = 0.5
+  ) + 
+  geom_line() +
+  facet_wrap(~tooth_name, nrow = 4) +
+  theme_bw() +
+  ylab('% of teeth')
+```
+
+#### Incisors
+```{r q3_figc, fig.cap = cap1c}
+cap1c = sprintf(cap_template, "1c", "incisors")
+q3_clean %>%
+  filter(grepl('incisor', tooth_name)) %>%
+  ggplot(aes(x = age, y = p, group = Status, color = Status) )  +
+  geom_ribbon(
+    aes(ymin = lwr, ymax = upr, fill = Status, color = NULL),
+    alpha = 0.5
+  ) + 
+  geom_line() +
+  facet_wrap(~tooth_name, nrow = 4) +
+  theme_bw() +
+  ylab('% of teeth')
+```
