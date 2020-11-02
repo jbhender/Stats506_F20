@@ -53,6 +53,14 @@ syntax for useful shell programming patterns. Here are short descriptions:
     illustrates how to use `NextMethod()` for efficient dispatch
     of inherited methods.
 
+ -  `strings.R` - code from the "Working with Strings in R" section of the
+     course notes [Strings and Regular Expressions][1].
+
+ -  `regexp.R` - code from the "Regular Expressions" section of the course notes
+     [Strings and Regular Expressions][1].
+ 
+[1]: <https://jbhender.github.io/Stats506/F20/Strings_and_Regular_Expressions.html>
+
 ### SAS
 
  - [example0](./sas/example0.sas) illustrates options for data import
