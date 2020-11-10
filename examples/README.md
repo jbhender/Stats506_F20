@@ -61,6 +61,11 @@ syntax for useful shell programming patterns. Here are short descriptions:
  
 [1]: <https://jbhender.github.io/Stats506/F20/Strings_and_Regular_Expressions.html>
 
+#### data.table
+ - `data.table_nyc14.R` - code form the notes on data.table's bracket (`[]`) function. 
+ - `data.table_copies.R` - code from the notes on copying by reference vs value.
+ - `data.table_reference.R` - code from additional notes on reference semantics. 
+
 ### SAS
 
  - [example0](./sas/example0.sas) illustrates options for data import
