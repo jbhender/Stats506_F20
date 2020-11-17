@@ -7,7 +7,7 @@
 # For each question, fill in the missing dplyr, SQL, or data.table 
 # translations.
 #
-# Author: Group X
+# Author: James Henderson
 # Updated: November 17, 2020
 # 79: -------------------------------------------------------------------------
 
@@ -163,8 +163,8 @@ batting_tbl %>%
   filter(HR > 400)
 
 ## Question 7 #################################################################
-# final the number of "20-20" seasons with 20+ SB and 20+ HR by a 
-# player (across all stints) in each year, 2000-2019 since 2000
+# find the number of "20-20" seasons with 20+ SB and 20+ HR by a 
+# player (across all stints) in each year, 2000-2019 
 
 # SQL: 20-20
 #! original query: misses cases where sum(SB) > 19 and sum(HR) > 19 but either
@@ -190,11 +190,11 @@ query2 =
 '
 SELECT yearID, COUNT(playerID) as N
 FROM (
- SELECT playerID, yearID, sum(SB) as SB, sum(HR) as HR
+ SELECT playerID, yearID, sum(SB) as SBtot, sum(HR) as HRtot
  FROM BATTING
  WHERE yearID > 1999
  GROUP BY playerID, yearID
- HAVING sum(SB) > 19 AND sum(HR) > 19
+ HAVING SBtot > 19 AND HRtot > 19
 )
 GROUP BY yearID
 '
