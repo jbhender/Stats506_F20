@@ -58,8 +58,12 @@ syntax for useful shell programming patterns. Here are short descriptions:
 
  -  `regexp.R` - code from the "Regular Expressions" section of the course notes
      [Strings and Regular Expressions][1].
+
+ -  `bootstrap_iqr_example.R` - example bootstrap code from the notes on
+    [Resampling Methods][2].
  
 [1]: <https://jbhender.github.io/Stats506/F20/Strings_and_Regular_Expressions.html>
+[2]: <https://jbhender.github.io/Stats506/F20/ResamplingMethods.html>
 
 #### data.table
  - `data.table_nyc14.R` - code form the notes on data.table's bracket (`[]`) function. 

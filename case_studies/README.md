@@ -8,6 +8,11 @@ attached homes. The case study uses the [tidyverse](tidyverse.org) group of pack
 case study is meant to demonstrate the key features of dplyr, including pipes (`%>%`) and
 the core dplyr verbs, pivoting data using tidyr, and creating plots with ggplot2.
 
+[3-chick_weight.R](./3-chick_weight.R) - A quick example of using the bootstrap to estimate
+a confidence interval for the median final weight and relative final weight for each diet in
+the ChickWeight data.  This case study uses data.table and also discusses programming with
+data.table objects. 
+
 ### Case studies using Stata
 
 [2-stata](./2-stata) - Contains Stata scripts (`.do`) for estimating national and regional
