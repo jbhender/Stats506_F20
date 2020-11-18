@@ -61,6 +61,12 @@ syntax for useful shell programming patterns. Here are short descriptions:
 
  -  `bootstrap_iqr_example.R` - example bootstrap code from the notes on
     [Resampling Methods][2].
+
+ - `chickwt_permutation_testing.R` - example permutation testing code from the
+    notes on [Resampling Methods][2].
+ 
+ - `xvalidate_ridge.R` - example cross-validation code from the notes on
+    [Resampling Methods][2]. 
  
 [1]: <https://jbhender.github.io/Stats506/F20/Strings_and_Regular_Expressions.html>
 [2]: <https://jbhender.github.io/Stats506/F20/ResamplingMethods.html>
