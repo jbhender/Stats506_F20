@@ -1,0 +1,381 @@
+---
+title: "Problem Set 4, Solution"
+author: "<a href='./index.html'>Statistics 506, Fall 2020</a>" 
+date: "`r format.Date(Sys.Date(), '%B %d, %Y')`"
+output: 
+  html_document:
+    code_folding: hide
+    theme: journal
+    highlight: pygments
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries}
+suppressPackageStartupMessages({
+  library(tidyverse); library(data.table)
+})
+```
+
+## About
+This is an example solution to [Problem Set 4][1] for Stats 506 in Fall 2020. 
+
+To build this document, run 
+`Rscript -e "rmarkdown::render('./PS4_solution.Rmd')"` at the command line or
+`bash ps4_make.sh` to build this document *after* running the solution scripts.
+
+## Question 1 
+
+In this quesiton, we use the 2009 and 2015 Residential Energy Consumption
+Survey [RECS](https://www.eia.gov/consumption/residential/) data to profile the
+quantities and types of televisions in US homes, by Census Region.
+
+### Data Preparation
+
+The script `0-ps4_q1_data.sh` downloads the source data files from the RECS
+website. These files are then prepared for analysis in SAS by 
+`1-ps4_q1_prepdata.sas`. Use the links below to view these files or refer to
+the solutions at the Stats506_F20 GitHub repository. 
+
+<details>
+ <summary> `0-ps4_q1_data.sh` </summary>
+ Click `Code` to view of `Hide` to collapse. 
+```{r 0-ps4_q1_data.sh, comment = "", results = "asis"}
+writeLines(c('```bash', readLines("./0-ps4_q1_data.sh"), '```'))
+```
+</details>
+
+
+<details>
+ <summary> `1-ps4_q1_prepdata.sas` </summary>
+```{r 1-ps4_q1_prepdata.sas, comment = "", results = "asis"}
+writeLines(c('```SAS', readLines("./1-ps4_q1_prepdata.sas"), '```'))
+```
+</details>
+
+### Analysis
+
+The analyses for both parts of this question are carried out in the script
+`2-ps4_q1_analysis.sas` which can be viewed below. The script defines a 
+number of SAS macros to facilitate the analysis. Briefly, these are:
+
+  * `%recs_sum()` - a high level macro for summarizing a variable in the RECS
+    data by group. 
+  * `%est_mean()` - a macro used by `%recs_sum()` to specifically compute the
+     mean of a variable by group. 
+  * `%est_prop()` - a macro, like `%est_mean()`, used by `%recs_sum()` to 
+     specifically compute the proportions for levels of a categorical variable
+     by group. 
+  * `%csv_export()` - a macro for writing a SAS data set to csv.  This macro
+     is also used in the solution to question 2. 
+
+<details>
+ <summary> `2-ps4_q1_analysis.sas` </summary>
+```{r 2-ps4_q1_analysis.sas, comment = "", results = "asis"}
+writeLines(c('```SAS', readLines("./2-ps4_q1_analysis.sas"), '```'))
+```
+</details>
+  
+### Part a
+
+In part **a** we compare the average number of televisions (`TVCOLOR`) in US 
+homes in 2009 and 2015 by Census Region. The data displayed below is read from
+the file `n_tv.csv` written by `2-ps4_q1_analysis.sas`.
+
+#### i - 2009 and 2015 estimates
+
+```{r q1_a_i}
+n_tv = fread('./n_tv.csv')
+
+rbind(
+  n_tv[, .(Year = "2009", region, est = est09, lwr = lwr09, upr = upr09)],
+  n_tv[, .(Year = "2015", region, est = est15, lwr = lwr15, upr = upr15)]
+) %>%
+  ggplot( aes(x = est, y = region, color = Year) ) +
+   geom_point() +
+   geom_errorbarh( aes(xmin = lwr, xmax = upr) ) +
+   xlab('Average # of TVs') +
+   ylab('') + 
+   theme_bw() +
+   scale_color_manual(values = c('darkblue', 'orange'))
+```
+
+#### ii - 2015 less 2009 differences
+
+```{r q1_a_ii, fig.cap=cap2}
+cap2 = paste(
+  "**Figure 2.** *Differences (2015 less 2009) in Average # of Televisions", 
+  "by Census Region.*"
+)
+n_tv %>%
+  ggplot( aes(x = diff, y = region) ) +
+  geom_point() +
+  geom_errorbarh( aes(xmin = lwr_diff, xmax = upr_diff) ) +
+  theme_bw() +
+  ylab('') +
+  xlab('Difference in Average # of Televisions (2015 less 2009)') +
+  xlim(c(-.4, 0))
+```
+
+#### iii - tables
+
+```{r q1_a_iii}
+tab1_cap = paste(
+  "**Table 1.** *Average number of televisions in US homes in 2009 and 2015,",
+  "by Census Region.*"
+)
+n_tv[, .(
+  `Census Region` = region,
+  `2009` = sprintf('%4.2f (%4.2f, %4.2f)', est09, lwr09, upr09),
+  `2015` = sprintf('%4.2f (%4.2f, %4.2f)', est15, lwr15, upr15),
+  `Difference` = sprintf('%4.2f (%4.2f, %4.2f)', diff, lwr_diff, upr_diff)
+)] %>%
+  knitr::kable(format = 'html', cap = tab1_cap, align = c('rccc')) %>%
+  kableExtra::kable_styling("striped", full_width = TRUE)
+```
+
+
+### Part b
+In part **b** we compare the proportion of primary televisions by display type
+for most used television (`TVTYPE1`) in US homes in 2009 and 2015 by 
+Census Region. The data displayed below is read from
+the file `tv_type.csv` written by `2-ps4_q1_analysis.sas`.
+
+#### i - 2009 and 2015 estimates
+
+```{r q1_b_i, fig.cap = cap3}
+cap3 = paste(
+  "**Figure 3.** *Proportion of primary television type, by",
+  "Census Region.* "             
+)
+
+# read in tv type results
+tv_type = fread('./type_tv.csv')
+
+# make tv_type a factor based on total change
+tt_levels = tv_type[, .(dbar = mean(diff)), .(tv_type)][order(-dbar), tv_type]
+tv_type[, tv_type := factor(tv_type, ..tt_levels)]
+rbind(
+  tv_type[, .(Year = "2009", region, tv_type, 
+              est = est09 * 100, lwr = lwr09 * 100, upr = upr09 * 100)],
+  tv_type[, .(Year = "2015", region, tv_type, 
+              est = est15 * 100, lwr = lwr15 * 100, upr = upr15 * 100)]
+) %>%
+  ggplot( aes(x = est, y = region, color = Year) ) +
+   geom_point() +
+   geom_errorbarh( aes(xmin = lwr, xmax = upr) ) +
+   facet_wrap(~tv_type) + 
+   xlab('% of primary TVs') +
+   ylab('') + 
+   theme_bw() +
+   scale_color_manual(values = c('darkblue', 'orange'))
+```
+
+#### ii - 2015 less 2009 differences
+
+```{r q1_b_ii, fig.cap=cap4}
+cap4 = paste(
+  "**Figure 4.** *Differences (2015 less 2009) in % of primary TVs for each", 
+  "type by Census Region.*"
+)
+tv_type %>%
+  ggplot( aes(x = diff * 100, y = region) ) +
+  geom_point() +
+  geom_errorbarh( aes(xmin = lwr_diff * 100, xmax = upr_diff * 100) ) +
+  facet_wrap(~ tv_type) +
+  geom_vline(xintercept = 0, lty = 'dashed') + 
+  theme_bw() +
+  ylab('') +
+  xlab('Difference in Average # of Televisions (2015 less 2009)') 
+```
+
+#### iii - table
+
+```{r q1_b_iii}
+tab2_cap = paste(
+  "**Table 2.** *Percent of primary televisions by type in US homes in 2009",
+  "and 2015 for each Census Region.*"
+)
+
+tab2 = tv_type[order(tv_type, region), .(
+  `Census Region` = region,
+  `TV Type` = tv_type, 
+  `2009` = sprintf('%3.1f <br>(%3.1f, %3.1f)', 
+                   est09 * 100, lwr09 * 100, upr09 * 100),
+  `2015` = sprintf('%3.1f <br>(%3.1f, %3.1f)', 
+                   est15 * 100, lwr15 * 100, upr15 * 100),
+  `Difference` = sprintf('%3.1f <br>(%3.1f, %3.1f)', 
+                         diff * 100, lwr_diff * 100, upr_diff * 100)
+)] %>%
+  knitr::kable(
+    format = 'html', cap = tab1_cap, align = c('rrccc'), escape = FALSE
+  ) %>%
+  kableExtra::kable_styling("striped", full_width = TRUE)
+
+for (i in 1:length(tt_levels)) {
+  tab2 = kableExtra::group_rows(
+    tab2, 
+    group_label = tt_levels[i], 
+    start_row = 1 + (i - 1) * 4, 
+    end_row = 4 * i
+  )
+}
+tab2
+```
+
+---
+
+### Question 2 [25 points]
+
+In this question we used the NHANES dentition and demographics 
+data from PS3 in order to model the probability that a permanent tooth is 
+present as a (non-linear) function of age and other demographics. I chose to 
+focus on tooth `OHX03TC`, the upper right 1st molar. The solution uses logistic
+regression, as required, and smoothing splines to allow the probability to vary
+smoothly with age.  The full analysis can be viewed below.
+
+<details>
+ <summary> `3-ps4_q2_analysis.sas` </summary>
+```{r 3-ps4_q2.sas, comment = "", results = "asis"}
+writeLines(c('```SAS', readLines("./3-ps4_q2.sas"), '```'))
+```
+</details>
+
+#### (a) Presense of a Permanent Tooth as a Function of Age
+
+In this portion, we treated the data is iid.  For modeling purposes, age was
+approximately centered at 33 years old and scaled to units of decades 
+(10 years). Cubic smoothing splines for age were implemented with 13 knots
+(interior break points) resulting in 16 basis functions. In addition,
+demographic controls were included for gender, race, and college attendance 
+(with or without graduation, and limited to those over 20). 
+
+The relationship with age is shown in Figure 5.  See part c for a regression
+table. 
+
+```{r q2_afig, fig.cap = cap5}
+cap5 = paste(
+  "**Figure 5.** *Expected probability for presence of a permanent upper", 
+  "right first molar.* This plot shows estimated probabilities at specific",
+  "ages for the presence of a permanent upper right first molar with", 
+  "(pointwise) 95% confidence intervals for these probabilities. The specific",
+  "proabilities here are for a reference group of female gender, Mexican",
+  "American race, and no college. The relationship with age is modeled as the",
+  "same for all groups, so other groups would show the same shape with",
+  "probabilities shifted up or down."
+)
+# predictions at specific ages
+yhat_mod3 = fread('./yhat_mod3.csv')
+ggplot(yhat_mod3, aes(x = 10 * age_c + 33, y = Predicted)) + 
+  geom_point() + 
+  geom_line() +
+  geom_errorbar( aes(ymin = LCLM, ymax = UCLM) ) + 
+  xlab('age') + 
+  ylab('(modeled) probability that permanent tooth is present') + 
+  theme_bw() 
+```
+
+#### (b) & (c) Comparison with Survey Weights
+
+The model from part was refit using the medical examination survey weights and
+the survey design. Weights were divided by the number of cohorts used, 4, so
+that results represent an average estimated relationship over the time period
+used. **Table 3** below presents a comparison of the survey results to the
+results obtained in part **a**. 
+
+```{r q2_b}
+# model comparison table 
+pars = fread('./pars.csv')
+pars = pars[!is.na(mod3_se), ]
+
+# make nicer labels
+race = c(
+  'race-1' = 'Mexian American', 
+  'race-2' = 'Other Hispanic',
+  'race-3' = 'Non-Hispanic White',
+  'race-4' = 'Non-Hispanic Black', 
+  'race-6' = 'Non-Hispanic Asian',
+  'race-7' = 'Other' 
+)
+age = sprintf('f%i(age)', 1:16)
+names(age) = sprintf('sm_age-%i', 1:16)
+
+vars = c('Intercept' = 'Intercept', 
+         'college' = 'College', 
+         'gender-1' = 'Male', 
+         race, 
+         age)
+
+pars[, 
+ Variable := ifelse(is.na(ClassVal0), 
+                     Variable, 
+                     sprintf('%s-%i', Variable, ClassVal0) ) ]
+pars[, `:=`(Variable = factor(vars[Variable], vars), ClassVal0 = NULL)]
+pars = pars[order(Variable)]
+
+## format as a table
+ci = function(est, se) {
+  bnds = matrix(
+    rep(est, each = 3) + c(0, -qnorm(.975), qnorm(.975)) * rep(se, each = 3),
+    3, length(est)
+  )
+  sprintf('%4.2f <br>(%4.2f, %4.2f)', bnds[1, ], bnds[2, ], bnds[3, ])
+}
+
+## caption
+tab3_cap = paste(
+  "**Table 3.** *Coefficients for Logistic Regression Models.* Coefficients",
+  "are given on the logistic scale owing to the large coefficents for the",
+  "the first two basis functions for age."
+)
+
+## the table
+tab3 = pars[, .(Variable, 
+         'Part a, Coefficient <br> (95% CI)' = ci(mod3_est, mod3_se), 
+         'Part b, Coefficient <br> (95% CI)' = ci(mod4_est, mod4_se)
+         )]
+
+knitr::kable(
+  tab3, format = 'html', escape = FALSE, caption = tab3_cap, align = c('rcc')
+) %>%
+  kableExtra::kable_styling("striped", full_width = TRUE)
+```
+
+Note that the large coefficients for the first two basis functions of age
+could likely be reduced by including additional knots in the ~3-6 year age
+range where this probability changes fastest. 
+
+```{r q2_c}
+tab4_cap = paste(
+  "**Table 4.** *Comparison of predicted probabilities at specific ages.*",
+  "The table shows predictions from the model without (a) and with (b)",
+  "use of the survey weights and design. The specific",
+  "proabilities here are for a reference group of female gender, Mexican",
+  "American race, and no college."
+)
+
+# merge probabilities for table 4
+yhat_mod4 = fread('./yhat_mod4.csv')
+
+m3 = 
+  yhat_mod3[, .(
+    Age = 10 * age_c + 33,
+    `Part a, p` = sprintf('%4.2f (%4.2f, %4.2f)', Predicted, LCLM, UCLM)
+  )]
+
+m4 = 
+  yhat_mod4[, .(
+    Age = 10 * age_c + 33,
+    `Part b, p` = sprintf('%4.2f (%4.2f, %4.2f)', Predicted, LCLM, UCLM)
+  )]
+
+tab4 = merge(m3, m4, by = 'Age')
+knitr::kable(tab4, format = 'html', caption = tab4_cap, align = 'rcc')  %>%
+  kableExtra::kable_styling("striped", full_width = TRUE)
+```
+
+
+
+[1]: <https://jbhender.github.io/Stats506/F20/PS4.html> "Problem Set 4"

@@ -1,0 +1,122 @@
+---
+title: "Problem Set 4"
+author: "<a href='./index.html'>Statistics 506, Fall 2020</a>" 
+date: "Due: Monday November 16, by 7pm"
+output: 
+  html_document:
+    theme: journal
+    highlight: pygments
+---
+
+## Instructions
+
+  + Submit the assignment by the due date via Canvas. Assignments may be 
+  submitted up to 72 hours late for a 5 point reduction. 
+
+  + All files read, sourced, or referred to within scripts should be assumed to
+    be in the same working directory (`./`).
+  
+  + Your code should be clearly written and it should be possible to assess it
+    by reading it. Use appropriate variable names and comments. Your style
+    will be graded using the [style rubric](./style_guide.html) [15 points].
+
+  + Some of these exercises may require you to use commands or techniques
+    that were not covered in class or in the course notes. You can use the web
+    as needed to identify appropriate approaches. Part of the purpose of these
+    exercises is for you to learn to be resourceful and self sufficient. 
+    Questions are welcome at all times, but please make an attempt to locate
+    relevant information yourself first.
+    
+  + Please use the provided 
+    [templates](https://github.com/jbhender/Stats506_F20/tree/master/problem_sets/templates/).
+
+  + This assignment should be done primarily in SAS, with the exception that
+    the write up and any associated figures or tables may be produced in R. As 
+    always you may use the Linux shell for data preparation and download
+    documentation.
+    
+  + Your submission should include a write-up as a pdf or HTML document and
+    all scripts needed to reproduce it. In your document, describe how the files
+    submitted relate to one another and be sure to answer the questions.     
+    For this assignment, scripts you should submit are: SAS (`.sas`), 
+    Rmarkdown (`.Rmd` or `.R` with spin) for the write-up, the write up 
+    itself (`.pdf` or `.html`), and (optionally) a shell script (`.sh`) 
+    `ps4_make.sh` to build the assignment. 
+    
+## Questions
+
+### Question 1 [60 points]
+
+This question is a modified version of question 1 from problem set 2. It is
+worth fewer points because the grouping structure is simplified and you should
+be able to adapt code for creating figures and tables from the earlier
+assignment. 
+
+Use the 2009 and 2015 Residential Energy Consumption Survey
+[RECS](https://www.eia.gov/consumption/residential/) data to profile the
+quantities and types of televisions in US homes, by Census Region.
+
+  a. [30 points] Compare the average number of televisions (`TVCOLOR`) in US
+     homes in 2009 and 2015 by Census Region. 
+     i. Compute point estimates and 95% confidence intervals for
+        both years (in SAS) and produce a figure (in R) to display the results.
+     i. Compute point estimates and 95% confidence intervals for the 2015 less
+        2009 differences (in SAS) and produce a figure (in R) to display the
+        results.
+     i. Combine the estimates for 2009, 2015, and their difference into a 
+        nicely formatted table. 
+        
+  a. [30 points] Repeat part "a" for the proportion of primary televisions by
+     display type for most used television (`TVTYPE1`). 
+
+Notes: 
+
+ * Remember, to compute the variance of the differences, you should assume the
+   2009 and 2015 estimates are independent.  That is if
+   $(\hat \theta_1, \hat v_1)$ and $(\hat \theta_2, \hat v_2)$ are the 
+   estimates and variances for 2009 and 2015, respectively, then
+   the differences and their variances are:
+   $(\hat \theta_2 - \hat \theta_1, \hat v_1 + \hat v_2)$. 
+     
+ * You may adapt either your own code or the solutions for problem set 2 for
+   the figures and tables. In either case, please provide a clear citation in
+   your write up, e.g. "A portion of this solution is adapted from 
+   (my or Dr. Henderson's) solution to PS2 Question 1." 
+   
+ * Use `proc export` or a similar procedure to to output your results in SAS
+   to be read into your write-up document.  
+ 
+### Question 2 [25 points]
+
+In this question you will use the NHANES dentition and demographics 
+data from PS3. 
+
+a. [10 points] Pick a single tooth (`OHXxxTC`) and model the probability that a
+   permanent tooth is present as a function of age using logistic regression. 
+   For this part ("a"), assume the data are iid and ignore the survey weights. 
+   You should consider non-linear transforms of age but only need to document
+   your final model in the write up. Control for other demographics included
+   in the data as warranted. 
+
+b. [10 points] Refit your model from part a using `proc surveylogistic` to
+   account for the weights. See the notes below for links to example code.
+   
+c. [5 points] In your write up, provide a side-by-side comparison of the results
+   when using or ignoring the survey weights.  This could be either a figure or
+   a table (one will suffice). 
+
+### Notes: 
+
+ + The data are available in the `Stats506_F20`
+   repository under `problem_sets/data/`. You will need the following two 
+   files:
+   * `nahanes_demo.csv`
+   * `nhanes_ohxden.csv`
+
+ + The first link below has a number of tutorials on working with survey weights
+   from NHANES. The second link is specific to SAS and logistic regression.
+   * https://wwwn.cdc.gov/nchs/nhanes/tutorials/samplecode.aspx
+   * https://wwwn.cdc.gov/nchs/data/tutorials/LogisticRegression_SAS_update_92.sas
+   
+ + Note, because we are using the dentition exam data use the `mec` weights
+   included in the data from the course repo. 

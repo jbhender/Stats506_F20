@@ -37,3 +37,9 @@ the various languages used in the course.  Currently, this contains:
 
  - [ps2](./solutions/ps2/) Solution to
    [Problem Set 2](https://jbhender.github.io/Stats506/F20/PS2.html)
+
+ - [ps3](./solutions/ps3/) Solution to
+   [Problem Set 3](https://jbhender.github.io/Stats506/F20/PS3.html)
+
+ - [ps4](./solutions/ps4/) Solution to
+   [Problem Set 4](https://jbhender.github.io/Stats506/F20/PS4.html)
