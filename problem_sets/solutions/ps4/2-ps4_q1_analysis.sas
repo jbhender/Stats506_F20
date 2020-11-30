@@ -81,7 +81,7 @@ options fmtsearch=(mylib.recs_formats work);
 /* aggregate RECS data by group and use BRR weights to compute CIs */
 %macro recs_sum(out, dat, wt_long, lib, id, var, grp, catvar = %str(),
                 post = %str(), dat_w = w, wt_w = w, wt_repl = repl, 
-                fay = 0.05, level = 0.95);
+                fay = 0.5, level = 0.95);
 
  /* out - a name for the summary data set being created
   * dat - the primary dataset
