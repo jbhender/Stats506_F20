@@ -66,7 +66,11 @@ syntax for useful shell programming patterns. Here are short descriptions:
     notes on [Resampling Methods][2].
  
  - `xvalidate_ridge.R` - example cross-validation code from the notes on
-    [Resampling Methods][2]. 
+    [Resampling Methods][2].
+
+ - `xvalidate_ridge_parallel.R` - examples of how to make parallel the
+    cross-validation from the example above, using `mclapply()` or `foreach()`.
+    Compares pre-scheduling to task-queuing under hypothetical scenarios. 
  
 [1]: <https://jbhender.github.io/Stats506/F20/Strings_and_Regular_Expressions.html>
 [2]: <https://jbhender.github.io/Stats506/F20/ResamplingMethods.html>

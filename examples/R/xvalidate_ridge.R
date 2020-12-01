@@ -31,11 +31,11 @@ beta = runif(p, 0, 1)
 
 # Generate training data: -----------------------------------------------------
 X_train = matrix(rnorm(n * p), n, p) %*% R
-Y_train = X_train %*% matrix(beta, ncol=1) + s * rnorm(n)
+Y_train = X_train %*% matrix(beta, ncol = 1) + s * rnorm(n)
 
 # Generate test data: ---------------------------------------------------------
 ## Here we use a "50-50" split, but "80-20" is more common in practice.
-X_test = matrix(rnorm(n*p), n, p) %*% R
+X_test = matrix(rnorm(n * p), n, p) %*% R
 Y_test = X_test %*% matrix(beta) + s * rnorm(n)
 
 # This fits a ridge regression choosing "beta-hat" to minimize
@@ -43,17 +43,22 @@ Y_test = X_test %*% matrix(beta) + s * rnorm(n)
 #
 # It actually selects a sequence of lambda's for the fit, how is outside our
 # scope.  
-fit1 = glmnet(X_train, Y_train, alpha = 1)
+fit1 = glmnet(X_train, Y_train, alpha = 0)
+
+res = Y_train - coef(fit1)[1] - X_train %*% coef(fit1)[2:{1 + ncol(X_test)}, ]
+plot(sqrt( colMeans(res^2)) ~ fit1$lambda, type = 'l')
 
 # Here's how well each set of beta's does at fitting the test data: -----------
 # Generally we don't get to do this as we need to choose lambda before evaluating
 # on our test data. 
 rmse_test = sqrt( colMeans( 
   { Y_test - coef(fit1)[1] - 
-    X_test %*% coef(fit1)[2:{1+ncol(X_test)}, ] 
+    X_test %*% coef(fit1)[2:{1 + ncol(X_test)}, ] 
   }^2 ) )
 
-plot(rmse_test ~ fit1$lambda)
+plot(rmse_test[60:80] ~ fit1$lambda[60:80], type = 'l')
+which.min(rmse_test)
+fit1$lambda[which.min(rmse_test)]
 
 # But, we want to choose lambda before using the test data: -------------------
 # So we use cross validation to select the tuning parameter "lambda" 
@@ -76,21 +81,24 @@ rmse = function(y, yhat) {
 # others for training: --------------------------------------------------------
 leave_out_rmse = list()
 for ( fold in unique(folds) ) {
-    fit = glmnet(X_train[folds ! =fold, ],
-                 Y_train[folds!=fold, ], 
+    fit = glmnet(X_train[folds != fold, ],
+                 Y_train[folds != fold, ], 
                  alpha = 0,
 		 lambda = lambda
 		 )    
-    leave_out_rmse[[fold+1]] = 
-     sqrt( colMeans( {Y_train[fold = =fold, ] - coef(fit)[1] - 
-           X_train[fold == fold, ] %*% coef(fit)[2:{1 + ncol(X_train)}, ] }^2 ) )
+    leave_out_rmse[[fold + 1]] = 
+     sqrt( colMeans( 
+       {Y_train[fold == fold, ] - coef(fit)[1] - 
+           X_train[fold == fold, ] %*% coef(fit)[2:{1 + ncol(X_train)}, ] }^2 
+     ) )
 }
 
 # Form a n_folds x length(lambda) matrix of estimated RMSE and 
 # then average within each colum. 
 leave_out_rmse = colMeans( do.call('rbind', leave_out_rmse) )
-
-plot(leave_out_rmse ~ lambda)
+m = which.min(leave_out_rmse)
+plot(leave_out_rmse[100:(m - 10)] ~ lambda[100:(m - 10)], type = 'l')
+plot( log(leave_out_rmse) ~ log(lambda), type = 'l')
 
 # Estimate the hyperparameter "lambda": ---------------------------------------
 lambda_hat = lambda[which.min(leave_out_rmse)]
@@ -100,7 +108,7 @@ rmse(Y_test, predict(fit1, X_test)[, which.min(leave_out_rmse)])
 
 # Compare to OLS: -------------------------------------------------------------
 beta_ols = coef( lm(Y_train ~ X_train) )
-rmse(Y_test, beta_ols[1] + X_train %*% beta_ols[-1])
+rmse(Y_test, beta_ols[1] + X_test %*% beta_ols[-1])
 
 ## Exercise(s): ---------------------------------------------------------------
 # 1. Modify this script for the lasso in the following ways:
