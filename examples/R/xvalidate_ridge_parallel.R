@@ -8,7 +8,7 @@
 # libraries: ------------------------------------------------------------------
 library(tidyverse)
 library(parallel)
-library(doParallel)
+library(doParallel) # foreach, iterators
 library(glmnet)
 
 # Function to compute the RMSE: -----------------------------------------------
@@ -85,7 +85,7 @@ for (fold in unique(folds) ) {
     Sys.sleep(2) # just to illustrate a point
     #Sys.sleep( wait_times[fold + 1] ) # wait an unknown number of seconds
     fit = glmnet(X_train[folds != fold, ], Y_train[folds != fold, ], 
-                 alpha = 1, lambda = lambda)    
+                 alpha = 0, lambda = lambda)    
     leave_out_rmse[[fold + 1]] = 
      sqrt( colMeans( {Y_train[fold == fold, ] - coef(fit)[1] - 
            X_train[fold == fold, ] %*% coef(fit)[2:{1 + ncol(X_train)}, ] }^2 
@@ -105,12 +105,11 @@ leave_out_rmse = list()
 for ( fold in unique(folds) ) {
   Sys.sleep( wait_times[fold + 1] ) # wait an unknown number of seconds
   fit = glmnet(X_train[folds != fold, ], Y_train[folds != fold, ], 
-               alpha = 1, lambda = lambda)    
+               alpha = 0, lambda = lambda)    
   leave_out_rmse[[fold + 1]] = 
     sqrt( colMeans( {Y_train[fold == fold, ] - coef(fit)[1] - 
         X_train[fold == fold, ] %*% coef(fit)[2:{1 + ncol(X_train)}, ] }^2 
     ) )
-  
 }
 tm2 = proc.time()
 sequential_poisson = tm2 - tm1
@@ -121,7 +120,7 @@ sequential_poisson = tm2 - tm1
 do_fold = function(fold, wait_times) {
   Sys.sleep(wait_times[fold + 1]) # wait an "unknown" number of seconds
   fit = glmnet(X_train[folds != fold, ], Y_train[folds != fold, ], 
-               alpha = 1, lambda = lambda)    
+               alpha = 0, lambda = lambda)    
   
   sqrt( colMeans( {Y_train[ fold == fold, ] - coef(fit)[1] - 
       X_train[fold == fold, ] %*% coef(fit)[2:{1 + ncol(X_train)}, ] }^2 ) )
@@ -146,7 +145,7 @@ tm1 = proc.time()
 leave_out_rmse_mcl = 
   mclapply(unique(folds), 
            do_fold, 
-           wait_times = rep(5, n_folds),
+           wait_times = rep(2, n_folds),
            mc.preschedule = FALSE, 
            mc.cores = 2)
 tm2 = proc.time()
